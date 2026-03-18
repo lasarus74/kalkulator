@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Kosztów Pracownika</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 900px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .input-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .input-section h2 {
+            color: #667eea;
+            font-size: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-section h2::before {
+            content: "⚙️";
+            margin-right: 10px;
+            font-size: 24px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            color: #555;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        input {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        input.error {
+            border-color: #e74c3c;
+            background-color: #fff5f5;
+        }
+
+        input.error:focus {
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+            font-weight: 600;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .calculate-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+
+        .results-section {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+        .results-section h2 {
+            color: #667eea;
+            font-size: 20px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+        }
+
+        .results-section h2::before {
+            content: "📊";
+            margin-right: 10px;
+            font-size: 24px;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-card h3 {
+            color: #555;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .result-value {
+            color: #667eea;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .result-subtitle {
+            color: #888;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .highlight-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .highlight-card h3 {
+            color: white;
+            opacity: 0.9;
+        }
+
+        .highlight-card .result-value {
+            color: white;
+        }
+
+        .highlight-card .result-subtitle {
+            color: white;
+            opacity: 0.8;
+        }
+
+        .details-section {
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .details-section h3 {
+            color: #667eea;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .detail-value {
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 20px;
+                line-height: 1.3;
+                margin-bottom: 10px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-badge {
+                position: static !important;
+                display: block;
+                margin: 0 auto 25px;
+                width: fit-content;
+                text-align: center;
+            }
+            
+            .header {
+                padding: 25px 15px !important;
+                text-align: center !important;
+            }
+
+            .header p {
+                font-size: 13px;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+            font-size: 12px;
+            background: #f8f9fa;
+        }
+
+        .branding {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .branding-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #667eea;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .branding-link:hover {
+            color: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        .branding-logo {
+            width: 30px;
+            height: 30px;
+        }
+
+        .header-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 11px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .header-badge:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .header {
+            position: relative;
+        }
+    
+        .small-btn {
+            padding: 10px 14px;
+            font-size: 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .small-btn.secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .small-btn.secondary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 18px rgba(102, 126, 234, 0.25);
+        }
+
+@page {
+    size: A4;
+    margin: 8mm;
+}
+
+@media print {
+    body {
+        background: white !important;
+        padding: 0 !important;
+        display: block !important;
+    }
+
+    .container {
+        box-shadow: none !important;
+        max-width: 100% !important;
+        border-radius: 0 !important;
+    }
+
+    /* Ukrywamy elementy niefunkcjonalne na wydruku */
+    .header-badge,
+    .calculate-btn,
+    .small-btn {
+        display: none !important;
+    }
+
+    /* Kompresja layoutu */
+    .header {
+        padding: 12px !important;
+    }
+
+    .content {
+        padding: 12px !important;
+    }
+
+    .input-section,
+    .results-section {
+        padding: 12px !important;
+        margin-bottom: 12px !important;
+    }
+
+    /* Mniejsze fonty – kluczowe, żeby zmieścić się na 1 stronie */
+    .header h1 {
+        font-size: 18px !important;
+    }
+
+    label,
+    .detail-label,
+    .detail-value,
+    .result-subtitle,
+    .footer {
+        font-size: 11px !important;
+    }
+
+    .result-value {
+        font-size: 20px !important;
+    }
+
+    /* Zmniejszamy odstępy w szczegółach */
+    .detail-row {
+        padding: 6px 0 !important;
+    }
+
+    .result-card {
+        padding: 12px !important;
+    }
+
+    input,
+    select {
+        border: 1px solid #ccc !important;
+        box-shadow: none !important;
+        padding: 6px 8px !important;
+        font-size: 11px !important;
+    }
+
+    /* Staramy się nie łamać sekcji */
+    .results-section,
+    .input-section,
+    .result-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .footer {
+        background: white !important;
+    }
+}
+
+
+</style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="https://aitronix.co.uk/" target="_blank" class="header-badge">
+                Powered by AItronix ⚡
+            </a>
+            <h1>💼 Kalkulator Kosztów Pracownika</h1>
+            <p>Oblicz dokładne koszty zatrudnienia i wynagrodzenie netto pracownika</p>
+        </div>
+
+        <div class="content">
+            <div class="input-section">
+                <h2>Parametry Wejściowe</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="stawkaBruttoEuro">Stawka NETTO (do wypłaty) w EURO za godzinę</label>
+                        <input type="number" id="stawkaBruttoEuro" value="21" step="0.01" min="0">
+                        <span class="error-message" id="error-stawkaBruttoEuro">Pole wymagane</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="kursEuro">Kurs EURO (PLN)</label>
+                        <input type="number" id="kursEuro" value="4.25" step="0.01" min="0">
+                        <span class="error-message" id="error-kursEuro">Pole wymagane</span>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="calculate-btn small-btn secondary" onclick="loadEurRate()">Pobierz aktualny kurs z NBP 🔄</button>
+                        <div class="result-subtitle" id="eurStatus" style="margin-top:6px;"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="iloscGodzin">Ilość godzin w miesiącu</label>
+                        <input type="number" id="iloscGodzin" value="176" step="1" min="0">
+                        <span class="error-message" id="error-iloscGodzin">Pole wymagane</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="dniZaGranica">Ilość dni za granicą (w miesiącu)</label>
+                        <input type="number" id="dniZaGranica" value="20" step="1" min="0">
+                        <span class="error-message" id="error-dniZaGranica">Pole wymagane</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="pitNarastajaco">Podstawa PIT narastająco przed tym miesiącem (G, PLN)</label>
+                        <input type="number" id="pitNarastajaco" value="0" step="0.01" min="0">
+                        <span class="error-message" id="error-pitNarastajaco">Pole wymagane</span>
+                    </div>
+<div class="form-group">
+                        <label for="wysokoscDiety">Wysokość diety w EURO</label>
+                        
+                        <select id="dietCountry" style="padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 16px; transition: all 0.3s ease; margin-bottom: 10px;"
+                                onchange="applyDietFromCountry()">
+                            <option value="">Wybierz kraj (dieta)</option>
+                        </select>
+                        <div class="result-subtitle" id="dietStatus" style="margin-top:-6px;margin-bottom:8px;"></div>
+                        <input type="number" id="wysokoscDiety" value="55" step="0.01" min="0">
+                        <span class="error-message" id="error-wysokoscDiety">Pole wymagane</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="srednia">Średnia krajowa (PLN)</label>
+                        <input type="number" id="srednia" value="8673" step="0.01" min="0">
+                        <span class="error-message" id="error-srednia">Pole wymagane</span>
+                    </div>
+                </div>
+                <button class="calculate-btn" onclick="calculate()">Oblicz 🧮</button>
+            </div>
+
+            <div class="results-section" id="resultsSection" style="display: none;">
+                <h2>Wyniki Obliczeń</h2>
+                <div class="input-section" style="margin-bottom: 25px;">
+                    <h2 style="margin-bottom: 15px;">Dane Pracownika</h2>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="imie">Imię</label>
+                            <input type="text" id="imie" value="" maxlength="80" placeholder="np. Jan">
+                        </div>
+                        <div class="form-group">
+                            <label for="nazwisko">Nazwisko</label>
+                            <input type="text" id="nazwisko" value="" maxlength="80" placeholder="np. Kowalski">
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="results-grid">
+                    <div class="result-card highlight-card">
+                        <h3>Do wypłaty dla pracownika</h3>
+                        <div class="result-value" id="wyplataPLN">0 PLN</div>
+                        <div class="result-subtitle" id="wyplataEURO">0 EUR</div>
+                        <div class="result-subtitle" id="wyplataGodzina">0 EUR/h</div>
+                    </div>
+
+                    <div class="result-card highlight-card">
+                        <h3>Całkowity koszt pracodawcy</h3>
+                        <div class="result-value" id="kosztPLN">0 PLN</div>
+                        <div class="result-subtitle" id="kosztEURO">0 EUR</div>
+                        <div class="result-subtitle" id="kosztGodzina">0 EUR/h</div>
+                    </div>
+                </div>
+
+                <div class="details-section">
+                    <h3>🔍 Szczegóły Obliczeń</h3>
+
+                    <div class="detail-row">
+                        <span class="detail-label">Wynagrodzenie brutto / miesiąc</span>
+                        <span class="detail-value" id="wynBrutto">0 PLN</span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">Dieta odliczana do ZUS (100%)</span>
+                        <span class="detail-value" id="dietaZUS">0 PLN</span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">Dieta odliczana do PIT (30%)</span>
+                        <span class="detail-value" id="dietaPIT">0 PLN</span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">Podstawa do ZUS (po dietach, min. średnia)</span>
+                        <span class="detail-value" id="podstawaZUS">0 PLN</span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">ZUS pracownika (13.71%)</span>
+                        <span class="detail-value" id="zusPracownik">0 PLN</span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">Składka zdrowotna (9%)</span>
+                        <span class="detail-value" id="zdrowotna">0 PLN</span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">Koszty pracownicze (PIT)</span>
+                        <span class="detail-value" id="kosztyPIT">0 PLN</span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">Podstawa PIT (G)</span>
+                        <span class="detail-value" id="podstawaPIT">0 PLN</span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">PIT (zaliczka 12% / 32%)</span>
+                        <span class="detail-value" id="pit">0 PLN</span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">ZUS pracodawcy (19.52%)</span>
+                        <span class="detail-value" id="zusPracodawca">0 PLN</span>
+                    </div>
+                </div>
+
+                <button type="button" class="calculate-btn" style="margin-top: 25px;" onclick="window.print()">
+                    Drukuj 🖨️
+                </button>
+</div>
+            </div>
+
+        <div class="footer">
+            © 2026 Kalkulator Kosztów Pracownika | Wszystkie obliczenia są szacunkowe
+            <div class="branding">
+                <a href="https://aitronix.co.uk/" target="_blank" class="branding-link">
+                    <svg class="branding-logo" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                        <!-- AItronix Logo bez tekstu -->
+                        <defs>
+                            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Letter A with tech triangle -->
+                        <path d="M 15 35 L 25 15 L 35 35 M 20 28 L 30 28" stroke="url(#logoGradient)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        <!-- Tech accent -->
+                        <circle cx="25" cy="15" r="2" fill="url(#logoGradient)"/>
+                    </svg>
+                    <span>Wersja 1.4 | Stworzone przez AItronix</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function formatNumber(num, decimals = 2) {
+            return num.toFixed(decimals).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        }
+
+        // Źródła danych na Twoim VPS (Plesk)
+        const EUR_URL = "data/eur.json";
+        const DIETS_URL = "data/diets.json";
+        window.__diets = null;
+
+   async function loadEurRate() {
+  const status = document.getElementById("eurStatus");
+  const NBP_URL = "https://api.nbp.pl/api/exchangerates/rates/A/EUR/?format=json";
+  const LOCAL_URL = "data/eur.json";
+
+  const MAX_AGE_DAYS = 10; // ile dni max akceptujemy dla lokalnego eur.json
+
+  function parseDate(d) {
+    // NBP daje YYYY-MM-DD
+    if (!d) return null;
+    const dt = new Date(d + "T00:00:00Z");
+    return isNaN(dt.getTime()) ? null : dt;
+  }
+
+  function daysOld(dt) {
+    const now = new Date();
+    const ms = now.getTime() - dt.getTime();
+    return Math.floor(ms / (1000 * 60 * 60 * 24));
+  }
+
+  async function fetchRate(url, label) {
+    const res = await fetch(`${url}${url.includes("?") ? "&" : "?"}t=${Date.now()}`, { cache: "no-store" });
+    if (!res.ok) throw new Error(`${label}: HTTP ${res.status}`);
+    const data = await res.json();
+    const mid = data?.rates?.[0]?.mid;
+    const date = data?.rates?.[0]?.effectiveDate;
+    if (typeof mid !== "number") throw new Error(`${label}: brak rates[0].mid`);
+    return { mid, date };
+  }
+
+  function applyRate(mid, date, label) {
+    document.getElementById("kursEuro").value = Number(mid).toFixed(4);
+    if (status) status.textContent = `OK (${label}): ${mid} (data: ${date || "brak"})`;
+    calculate();
+  }
+
+  try {
+    if (status) status.textContent = "Pobieram kurs EUR z NBP…";
+    const nbp = await fetchRate(NBP_URL, "NBP");
+    applyRate(nbp.mid, nbp.date, "NBP");
+    return;
+  } catch (e) {
+    // NBP nie działa (CORS/sieć) → próbujemy lokalny, ale tylko jeśli nie jest stary
+    try {
+      if (status) status.textContent = "NBP niedostępny. Sprawdzam lokalny eur.json…";
+      const local = await fetchRate(LOCAL_URL, "LOCAL");
+
+      const dt = parseDate(local.date);
+      if (!dt) throw new Error("LOCAL: brak poprawnej effectiveDate");
+
+      const age = daysOld(dt);
+      if (age > MAX_AGE_DAYS) {
+        throw new Error(`LOCAL: kurs zbyt stary (${age} dni)`);
+      }
+
+      applyRate(local.mid, local.date, `LOCAL (fallback)`);
+      return;
+    } catch (e2) {
+      if (status) status.textContent =
+        "Nie udało się pobrać kursu z NBP, a lokalny eur.json jest brakujący/stary. " +
+        "Uzupełnij kurs ręcznie albo ustaw automatyczną aktualizację na VPS.";
+      // nic nie nadpisujemy — zostaje obecna wartość w polu kursu
+    }
+  }
+}
+
+
+        async function loadDiets() {
+            const status = document.getElementById("dietStatus");
+            const select = document.getElementById("dietCountry");
+            if (!select) return;
+
+            try {
+                if (status) status.textContent = "Ładuję listę diet…";
+                const res = await fetch(`${DIETS_URL}?t=${Date.now()}`, { cache: "no-store" });
+                if (!res.ok) throw new Error("HTTP " + res.status);
+                const diets = await res.json();
+                window.__diets = diets;
+
+                select.innerHTML = '<option value="">Wybierz kraj (dieta)</option>';
+
+                Object.keys(diets).forEach((code) => {
+                    const item = diets[code] || {};
+                    const opt = document.createElement("option");
+                    opt.value = code;
+                    const name = item.name ? (" — " + item.name) : "";
+                    const diet = (typeof item.diet === "number") ? (" (" + item.diet + " " + (item.currency || "EUR") + ")") : "";
+                    opt.textContent = code + name + diet;
+                    select.appendChild(opt);
+                });
+
+                if (status) status.textContent = "OK: załadowano " + Object.keys(diets).length + " krajów";
+            } catch (e) {
+                if (status) status.textContent = "Błąd ładowania diet: " + (e && e.message ? e.message : e);
+            }
+        }
+
+        function applyDietFromCountry() {
+            const status = document.getElementById("dietStatus");
+            const select = document.getElementById("dietCountry");
+            const code = select ? select.value : "";
+            if (!code || !window.__diets) return;
+
+            const item = window.__diets[code];
+            if (!item || typeof item.diet !== "number") {
+                if (status) status.textContent = "Brak diety dla: " + code;
+                return;
+            }
+
+            document.getElementById("wysokoscDiety").value = Number(item.diet).toFixed(2);
+            if (status) status.textContent = "Ustawiono dietę " + item.diet + " " + (item.currency || "EUR") + " dla " + code;
+
+            calculate();
+        }
+
+
+        // Walidacja i sanityzacja inputu - tylko cyfry i kropka/przecinek
+        function sanitizeInput(input) {
+            const element = document.getElementById(input);
+            
+            // Usuń wszystkie znaki oprócz cyfr, kropki i przecinka
+            element.addEventListener('input', function(e) {
+                let value = e.target.value;
+                // Zamień przecinek na kropkę
+                value = value.replace(',', '.');
+                // Usuń wszystkie znaki oprócz cyfr i kropki
+                value = value.replace(/[^\d.]/g, '');
+                // Upewnij się że jest tylko jedna kropka
+                const parts = value.split('.');
+                if (parts.length > 2) {
+                    value = parts[0] + '.' + parts.slice(1).join('');
+                }
+                e.target.value = value;
+            });
+
+            // Zapobiegaj wklejaniu złośliwego kodu
+            element.addEventListener('paste', function(e) {
+                e.preventDefault();
+                let pastedText = (e.clipboardData || window.clipboardData).getData('text');
+                // Sanityzuj wklejony tekst
+                pastedText = pastedText.replace(',', '.').replace(/[^\d.]/g, '');
+                const parts = pastedText.split('.');
+                if (parts.length > 2) {
+                    pastedText = parts[0] + '.' + parts.slice(1).join('');
+                }
+                e.target.value = pastedText;
+            });
+        }
+
+        // Walidacja pola
+        function validateField(fieldId) {
+            const field = document.getElementById(fieldId);
+            const errorMsg = document.getElementById('error-' + fieldId);
+            const value = parseFloat(field.value);
+
+            if (!field.value || field.value.trim() === '' || isNaN(value) || value < 0) {
+                field.classList.add('error');
+                errorMsg.classList.add('show');
+                return false;
+            } else {
+                field.classList.remove('error');
+                errorMsg.classList.remove('show');
+                return true;
+            }
+        }
+
+        // Walidacja wszystkich pól
+        function validateAllFields() {
+            const fields = ['stawkaBruttoEuro', 'kursEuro', 'iloscGodzin', 'dniZaGranica', 'wysokoscDiety', 'srednia', 'pitNarastajaco'];
+            let allValid = true;
+
+            fields.forEach(field => {
+                if (!validateField(field)) {
+                    allValid = false;
+                }
+            });
+
+            return allValid;
+        }
+
+        
+        function clampMin(num, minVal) {
+            return num < minVal ? minVal : num;
+        }
+
+        // Oblicz PIT (H) z uwzględnieniem progu 120 000 PLN rocznie (narastająco).
+        // pitNarastajaco = suma podstawy PIT (G) od początku roku PRZED tym miesiącem (PLN).
+        function calculatePIT(G_miesieczne, pitNarastajaco) {
+            const prog = 120000;
+
+            // Jeśli podstawa jest ujemna lub zerowa, nie naliczamy podatku
+            if (!isFinite(G_miesieczne) || G_miesieczne <= 0) return 0;
+
+            const ytd = clampMin(pitNarastajaco || 0, 0);
+
+            let podatek = 0;
+            if (ytd >= prog) {
+                podatek = G_miesieczne * 0.32;
+            } else if (ytd + G_miesieczne <= prog) {
+                podatek = G_miesieczne * 0.12;
+            } else {
+                // Miesiąc "przebija" próg – część 12%, część 32%
+                const czesc12 = prog - ytd;
+                const czesc32 = G_miesieczne - czesc12;
+                podatek = czesc12 * 0.12 + czesc32 * 0.32;
+            }
+
+            // Kwota zmniejszająca: 300 PLN / miesiąc (wg opisu)
+            podatek = podatek - 300;
+
+            // Nie pozwalamy na ujemny PIT
+            return clampMin(podatek, 0);
+        }
+
+        // Liczy wszystko "w przód": z A (brutto miesięczne w PLN) -> B, C + szczegóły.
+        // Zgodnie z opisem: dla ZUS podstawa ma "podłogę" średniej krajowej,
+        // dla PIT nie ma tej podłogi (odjęcie 30% diet + koszty 300 PLN).
+        function calculateFromA(A_pln, dniZaGranica, dietaEuro, kursEuro, srednia, pitNarastajaco) {
+            // Diety:
+            // - ZUS: odliczamy 100% diety (dieta * dni)
+            // - PIT: odliczamy 30% diety (30% * dieta * dni)
+            const dietaZUS = 1.00 * dietaEuro * kursEuro * dniZaGranica;   // 100% diety x dni (PLN)
+            const dietaPIT = 0.30 * dietaEuro * kursEuro * dniZaGranica;   // 30% diety x dni (PLN)
+
+            // Podstawa ZUS: max(A - dietaZUS, średnia)
+            const D = Math.max(A_pln - dietaZUS, srednia);
+
+            // Składki pracownika
+            const E = D * 0.1371;                 // ZUS społeczne pracownika
+            const F = (D - E) * 0.09;             // zdrowotna
+
+            // Podstawa PIT (miesięczna) – bez "podłogi" średniej; PIT odlicza tylko 30% diet
+            // + koszty pracownicze 300 PLN (wg uwag klienta)
+            const kosztyPracownicze = 300;
+            const G = (A_pln - dietaPIT) - E - kosztyPracownicze;
+
+            // Zaliczka PIT
+            const H = calculatePIT(G, pitNarastajaco);
+
+            // Netto (do wypłaty)
+            const B_pln = A_pln - E - F - H;
+
+            // Koszt pracodawcy: składki pracodawcy liczone od podstawy ZUS (D)
+            const zusPracodawcy = D * 0.1952;
+            const C_pln = A_pln + zusPracodawcy;
+
+            return {
+                A_pln, B_pln, C_pln,
+                D, E, F, G, H,
+                dietaZUS, dietaPIT,
+                kosztyPracownicze,
+                zusPracodawcy
+            };
+        }
+
+        // Szukanie A (brutto) dla zadanego B (netto) – metoda bisekcji.
+        function findAfromB(targetB_pln, dniZaGranica, dietaEuro, kursEuro, srednia, pitNarastajaco) {
+            // Jeżeli targetB <= 0, zwracamy 0
+            if (!isFinite(targetB_pln) || targetB_pln <= 0) return 0;
+
+            // Ustalamy przedział [low, high] tak, aby f(low) <= targetB <= f(high)
+            let low = 0;
+            let high = Math.max(targetB_pln * 1.6, srednia); // start
+
+            // Funkcja netto z A
+            const netFromA = (A) => calculateFromA(A, dniZaGranica, dietaEuro, kursEuro, srednia, pitNarastajaco).B_pln;
+
+            // Rozszerz high aż netto będzie >= target
+            // (w razie bardzo dużych potrąceń / progów)
+            let safety = 0;
+            while (netFromA(high) < targetB_pln && safety < 60) {
+                high *= 1.6;
+                safety++;
+            }
+
+            // Jeśli mimo to nie osiągnęliśmy targetu (ekstremalne dane), zwróć high jako best-effort
+            if (netFromA(high) < targetB_pln) return high;
+
+            // Bisekcja
+            let mid = high;
+            for (let i = 0; i < 80; i++) {
+                mid = (low + high) / 2;
+                const bMid = netFromA(mid);
+
+                if (Math.abs(bMid - targetB_pln) < 0.01) break; // 1 grosz
+                if (bMid < targetB_pln) low = mid;
+                else high = mid;
+            }
+
+            return mid;
+        }
+
+        function calculate() {
+            // Walidacja przed obliczeniami
+            if (!validateAllFields()) {
+                const firstError = document.querySelector('input.error');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstError.focus();
+                }
+                return;
+            }
+
+            // Pobierz wartości z formularza (już zwalidowane)
+            const stawkaNettoEuro = parseFloat(document.getElementById('stawkaBruttoEuro').value) || 0; // zachowujemy ID dla UI
+            const kursEuro = parseFloat(document.getElementById('kursEuro').value) || 0;
+            const iloscGodzin = parseFloat(document.getElementById('iloscGodzin').value) || 0;
+            const dniZaGranica = parseFloat(document.getElementById('dniZaGranica').value) || 0;
+            const wysokoscDiety = parseFloat(document.getElementById('wysokoscDiety').value) || 0;
+            const srednia = parseFloat(document.getElementById('srednia').value) || 0;
+            const pitNarastajaco = parseFloat(document.getElementById('pitNarastajaco').value) || 0;
+
+            // Zadane B (netto) miesięczne w PLN
+            const targetB_pln = stawkaNettoEuro * kursEuro * iloscGodzin;
+
+            // Znajdź A (brutto miesięczne w PLN)
+            const A_pln = findAfromB(targetB_pln, dniZaGranica, wysokoscDiety, kursEuro, srednia, pitNarastajaco);
+
+            // Policz szczegóły z obliczonego A
+            const r = calculateFromA(A_pln, dniZaGranica, wysokoscDiety, kursEuro, srednia, pitNarastajaco);
+
+            // Wyniki końcowe
+            const pracownikWyplataPLN = r.B_pln;
+            const pracownikWyplataEURO = pracownikWyplataPLN / kursEuro;
+            const pracownikWyplata1h = iloscGodzin > 0 ? (pracownikWyplataEURO / iloscGodzin) : 0;
+
+            const kosztPracodawcyPLN = r.C_pln;
+            const kosztPracodawcyEURO = kosztPracodawcyPLN / kursEuro;
+            const kosztPracodawcy1h = iloscGodzin > 0 ? (kosztPracodawcyEURO / iloscGodzin) : 0;
+
+            // Wyświetl wyniki
+            document.getElementById('wyplataPLN').textContent = formatNumber(pracownikWyplataPLN) + ' PLN';
+            document.getElementById('wyplataEURO').textContent = formatNumber(pracownikWyplataEURO) + ' EUR';
+            document.getElementById('wyplataGodzina').textContent = formatNumber(pracownikWyplata1h) + ' EUR/h';
+
+            document.getElementById('kosztPLN').textContent = formatNumber(kosztPracodawcyPLN) + ' PLN';
+            document.getElementById('kosztEURO').textContent = formatNumber(kosztPracodawcyEURO) + ' EUR';
+            document.getElementById('kosztGodzina').textContent = formatNumber(kosztPracodawcy1h) + ' EUR/h';
+
+            // Szczegóły (A, diety, ZUS, PIT)
+            document.getElementById('wynBrutto').textContent = formatNumber(r.A_pln) + ' PLN';
+            document.getElementById('dietaZUS').textContent = formatNumber(r.dietaZUS) + ' PLN';
+            document.getElementById('dietaPIT').textContent = formatNumber(r.dietaPIT) + ' PLN';
+
+            document.getElementById('podstawaZUS').textContent = formatNumber(r.D) + ' PLN';
+            document.getElementById('zusPracownik').textContent = formatNumber(r.E) + ' PLN';
+            document.getElementById('zdrowotna').textContent = formatNumber(r.F) + ' PLN';
+
+            document.getElementById('kosztyPIT').textContent = formatNumber(r.kosztyPracownicze) + ' PLN';
+            document.getElementById('podstawaPIT').textContent = formatNumber(r.G) + ' PLN';
+            document.getElementById('pit').textContent = formatNumber(r.H) + ' PLN';
+
+            document.getElementById('zusPracodawca').textContent = formatNumber(r.zusPracodawcy) + ' PLN';
+
+            // Pokaż sekcję wyników
+            document.getElementById('resultsSection').style.display = 'block';
+
+            // Przewiń do wyników (tylko przy ręcznym kliknięciu, nie przy auto-load)
+            if (window.calculatorLoaded) {
+                document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        // Flaga dla pierwszego załadowania
+
+        window.calculatorLoaded = false;
+
+        // Inicjalizacja walidacji dla wszystkich pól
+        window.addEventListener('load', function() {
+            const fields = ['stawkaBruttoEuro', 'kursEuro', 'iloscGodzin', 'dniZaGranica', 'wysokoscDiety', 'srednia', 'pitNarastajaco'];
+            
+            // Dodaj sanityzację do każdego pola
+            fields.forEach(field => {
+                sanitizeInput(field);
+                
+                // Walidacja przy opuszczeniu pola
+                document.getElementById(field).addEventListener('blur', function() {
+                    validateField(field);
+                });
+
+                // Usuń error przy rozpoczęciu edycji
+                document.getElementById(field).addEventListener('focus', function() {
+                    this.classList.remove('error');
+                    document.getElementById('error-' + field).classList.remove('show');
+                });
+            });
+
+            // Oblicz przy załadowaniu strony z domyślnymi wartościami
+            calculate();
+            
+            
+            // Załaduj dietę (lista krajów) z pliku JSON na serwerze
+            loadDiets();
+// Ustaw flagę że strona jest załadowana - następne obliczenia będą przewijać
+            window.calculatorLoaded = true;
+        });
+    </script>
+</body>
+</html>

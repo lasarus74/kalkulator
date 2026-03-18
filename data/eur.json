@@ -1,0 +1,6 @@
+{
+  "table": "A",
+  "currency": "euro",
+  "code": "EUR",
+  "rates": [{ "no": "000/A/NBP/2026", "effectiveDate": "2026-01-23", "mid": 4.25 }]
+}
