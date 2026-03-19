@@ -95,6 +95,8 @@
             border-radius: 10px;
             font-size: 16px;
             transition: all 0.3s ease;
+            width: 100%;
+            min-width: 0;
         }
 
         input:focus, select:focus {
@@ -468,7 +470,11 @@
 
         @media (max-width: 768px) {
             .content {
-                padding: 20px;
+                padding: 15px;
+            }
+
+            .input-section {
+                padding: 15px;
             }
 
             .header h1 {
@@ -489,6 +495,42 @@
                 grid-template-columns: 1fr;
             }
 
+            /* Sekcja A: pola zaliczek nie mogą wychodzić poza kontener */
+            .zaliczka-fields input,
+            .zaliczka-kurs-group input {
+                min-width: 0;
+                width: 100%;
+            }
+
+            /* Sekcja B: kurs-dieta-group — trzy elementy w kolumnie na telefonie */
+            .kurs-dieta-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .kurs-dieta-group .kurs-dieta-field {
+                flex: 1 1 auto;
+            }
+
+            .kurs-dieta-group .kurs-dieta-lock {
+                align-self: flex-start;
+            }
+
+            .kurs-dieta-group .kurs-dieta-fetch {
+                flex: 1 1 auto;
+            }
+
+            /* Zapobieganie wychodzeniu inputów i buttonów poza kontener */
+            input, select, button {
+                max-width: 100%;
+                min-width: 0;
+            }
+
+            .small-btn {
+                white-space: normal;
+                word-wrap: break-word;
+            }
+
             .header-badge {
                 position: static !important;
                 display: block;
@@ -496,7 +538,7 @@
                 width: fit-content;
                 text-align: center;
             }
-            
+
             .header {
                 padding: 25px 15px !important;
                 text-align: center !important;
@@ -1163,6 +1205,7 @@
             if (!latestDate) {
                 if (status) {
                     status.textContent = 'Brak dat zaliczek w sekcji A — uzupełnij daty, aby pobrać kurs.';
+                    status.style.color = '#e74c3c';
                 }
                 return;
             }
@@ -1172,16 +1215,25 @@
             dayBefore.setDate(dayBefore.getDate() - 1);
             const dateStr = dayBefore.toISOString().slice(0, 10);
 
-            if (status) status.textContent = `Pobieram kurs EUR z NBP na dzień roboczy przed ${latestDate.toISOString().slice(0, 10)}…`;
+            if (status) {
+                status.style.color = '';
+                status.textContent = `Pobieram kurs EUR z NBP na dzień roboczy przed ${latestDate.toISOString().slice(0, 10)}…`;
+            }
 
             // fetchEurRateForDate sam cofa się po weekendach/świętach
             const result = await fetchEurRateForDate(dateStr);
 
             if (result) {
                 document.getElementById('kursEuro').value = Number(result.mid).toFixed(4);
-                if (status) status.textContent = `OK (NBP): ${result.mid.toFixed(4)} (data kursu: ${result.effectiveDate}, ostatnia zaliczka: ${latestDate.toISOString().slice(0, 10)})`;
+                if (status) {
+                    status.style.color = '#28a745';
+                    status.textContent = `OK (NBP): ${result.mid.toFixed(4)} (data kursu: ${result.effectiveDate}, ostatnia zaliczka: ${latestDate.toISOString().slice(0, 10)})`;
+                }
             } else {
-                if (status) status.textContent = 'Nie udało się pobrać kursu z NBP. Wpisz kurs ręcznie (odblokuj kłódką).';
+                if (status) {
+                    status.style.color = '#e74c3c';
+                    status.textContent = 'Nie udało się pobrać kursu z NBP. Wpisz kurs ręcznie (odblokuj kłódką).';
+                }
             }
         }
 
