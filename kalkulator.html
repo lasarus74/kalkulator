@@ -295,6 +295,77 @@
             margin-bottom: 4px;
         }
 
+        /* Grupa kursu EUR do rozliczenia diet w Sekcji B */
+        .kurs-dieta-group {
+            display: flex;
+            gap: 8px;
+            align-items: end;
+            grid-column: 1 / -1;
+        }
+
+        .kurs-dieta-group .kurs-dieta-field {
+            display: flex;
+            flex-direction: column;
+            flex: 0 0 160px;
+        }
+
+        .kurs-dieta-group .kurs-dieta-field label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 6px;
+        }
+
+        .kurs-dieta-group .kurs-dieta-field input {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .kurs-dieta-group .kurs-dieta-lock {
+            display: flex;
+            flex-direction: column;
+            justify-content: end;
+            flex: 0 0 auto;
+        }
+
+        .kurs-dieta-group .kurs-dieta-lock .kurs-lock-btn {
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: #f8f9fa;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .kurs-dieta-group .kurs-dieta-lock .kurs-lock-btn:hover {
+            border-color: #667eea;
+            background: #eef0ff;
+        }
+
+        .kurs-dieta-group .kurs-dieta-lock .kurs-lock-btn.unlocked {
+            border-color: #f0ad4e;
+            background: #fff8ec;
+        }
+
+        .kurs-dieta-group .kurs-dieta-fetch {
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 auto;
+        }
+
+        .kurs-dieta-group .kurs-dieta-fetch label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 6px;
+        }
+
         .zaliczka-kurs-group {
             display: flex;
             gap: 6px;
@@ -748,14 +819,22 @@
             <div class="input-section">
                 <h2><span class="section-icon">⚙️</span> Sekcja B: Parametry rozliczenia</h2>
                 <div class="form-grid">
-                    <div class="form-group">
-                        <label for="kursEuro">Kurs EUR do rozliczenia diet</label>
-                        <input type="number" id="kursEuro" value="4.25" step="0.0001" min="0">
-                        <span class="error-message" id="error-kursEuro">Pole wymagane</span>
+                    <div class="kurs-dieta-group">
+                        <div class="kurs-dieta-field">
+                            <label for="kursEuro">Kurs EUR do rozliczenia diet</label>
+                            <input type="number" id="kursEuro" value="4.25" step="0.0001" min="0" readonly>
+                            <span class="error-message" id="error-kursEuro">Pole wymagane</span>
+                        </div>
+                        <div class="kurs-dieta-lock">
+                            <button type="button" class="kurs-lock-btn" id="kursDietaLockBtn" onclick="toggleKursDietaLock()" title="Odblokuj do edycji ręcznej">🔒</button>
+                        </div>
+                        <div class="kurs-dieta-fetch">
+                            <label>Kurs na dzień roboczy przed ostatnią zaliczką</label>
+                            <button type="button" class="calculate-btn small-btn secondary" onclick="loadEurRateBeforeLastZaliczka()">Pobierz kurs z NBP 🔄</button>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <button type="button" class="calculate-btn small-btn secondary" onclick="loadEurRate()">Pobierz aktualny kurs z NBP 🔄</button>
-                        <div class="result-subtitle" id="eurStatus" style="margin-top:6px;"></div>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <div class="result-subtitle" id="eurStatus" style="margin-top:0;"></div>
                     </div>
                     <div class="form-group">
                         <label for="dniZaGranica">Ilość dni za granicą (w miesiącu)</label>
@@ -1034,6 +1113,75 @@
                         "Nie udało się pobrać kursu z NBP, a lokalny eur.json jest brakujący/stary. " +
                         "Uzupełnij kurs ręcznie albo ustaw automatyczną aktualizację na VPS.";
                 }
+            }
+        }
+
+        // ---------------------------------------------------------------
+        // Przełącza blokadę pola kursu EUR do rozliczenia diet (Sekcja B).
+        // 🔒 = readonly (kurs pobierany automatycznie)
+        // ✏️ = odblokowany (kurs wpisywany ręcznie)
+        // ---------------------------------------------------------------
+        function toggleKursDietaLock() {
+            const kursInput = document.getElementById('kursEuro');
+            const btn = document.getElementById('kursDietaLockBtn');
+            const status = document.getElementById('eurStatus');
+
+            if (kursInput.readOnly) {
+                kursInput.readOnly = false;
+                btn.textContent = '✏️';
+                btn.classList.add('unlocked');
+                btn.title = 'Zablokuj (powrót do automatycznego kursu)';
+                if (status) status.textContent = 'Tryb ręczny — wpisz kurs samodzielnie';
+            } else {
+                kursInput.readOnly = true;
+                btn.textContent = '🔒';
+                btn.classList.remove('unlocked');
+                btn.title = 'Odblokuj do edycji ręcznej';
+                if (status) status.textContent = '';
+            }
+        }
+
+        // ---------------------------------------------------------------
+        // Pobiera kurs EUR z NBP na ostatni dzień roboczy
+        // poprzedzający datę ostatniej zaliczki.
+        // ---------------------------------------------------------------
+        async function loadEurRateBeforeLastZaliczka() {
+            const status = document.getElementById('eurStatus');
+
+            // Znajdź najpóźniejszą datę spośród wypełnionych zaliczek
+            let latestDate = null;
+            for (let i = 1; i <= 4; i++) {
+                const dateStr = document.getElementById(`zaliczka${i}_data`).value;
+                if (dateStr) {
+                    const d = new Date(dateStr + 'T12:00:00Z');
+                    if (!latestDate || d > latestDate) {
+                        latestDate = d;
+                    }
+                }
+            }
+
+            if (!latestDate) {
+                if (status) {
+                    status.textContent = 'Brak dat zaliczek w sekcji A — uzupełnij daty, aby pobrać kurs.';
+                }
+                return;
+            }
+
+            // Cofnij o 1 dzień (dzień roboczy przed ostatnią zaliczką)
+            const dayBefore = new Date(latestDate);
+            dayBefore.setDate(dayBefore.getDate() - 1);
+            const dateStr = dayBefore.toISOString().slice(0, 10);
+
+            if (status) status.textContent = `Pobieram kurs EUR z NBP na dzień roboczy przed ${latestDate.toISOString().slice(0, 10)}…`;
+
+            // fetchEurRateForDate sam cofa się po weekendach/świętach
+            const result = await fetchEurRateForDate(dateStr);
+
+            if (result) {
+                document.getElementById('kursEuro').value = Number(result.mid).toFixed(4);
+                if (status) status.textContent = `OK (NBP): ${result.mid.toFixed(4)} (data kursu: ${result.effectiveDate}, ostatnia zaliczka: ${latestDate.toISOString().slice(0, 10)})`;
+            } else {
+                if (status) status.textContent = 'Nie udało się pobrać kursu z NBP. Wpisz kurs ręcznie (odblokuj kłódką).';
             }
         }
 
