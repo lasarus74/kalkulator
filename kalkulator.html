@@ -299,23 +299,30 @@
 
         /* Grupa kursu EUR do rozliczenia diet w Sekcji B */
         .kurs-dieta-group {
-            display: flex;
-            gap: 12px;
-            align-items: end;
             grid-column: 1 / -1;
         }
 
-        .kurs-dieta-group .kurs-dieta-fetch {
-            display: flex;
-            flex-direction: column;
-            flex: 1 1 auto;
-        }
-
-        .kurs-dieta-group .kurs-dieta-fetch label {
+        .kurs-dieta-group .kurs-dieta-top-label {
             font-size: 12px;
             font-weight: 600;
             color: #555;
             margin-bottom: 6px;
+        }
+
+        .kurs-dieta-group .kurs-dieta-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .kurs-dieta-group .kurs-dieta-fetch {
+            flex: 0 0 auto;
+        }
+
+        .kurs-dieta-group .kurs-dieta-fetch .small-btn {
+            margin-top: 0;
+            width: auto;
+            white-space: nowrap;
         }
 
         .kurs-dieta-group .kurs-dieta-input-row {
@@ -508,17 +515,17 @@
             }
 
             /* Sekcja B: kurs-dieta-group — kolumna na mobile, fetch nad polem */
-            .kurs-dieta-group {
+            .kurs-dieta-group .kurs-dieta-top-label {
+                text-align: center;
+            }
+
+            .kurs-dieta-group .kurs-dieta-row {
                 flex-direction: column;
                 align-items: stretch;
             }
 
             .kurs-dieta-group .kurs-dieta-fetch {
                 order: -1;
-                text-align: center;
-            }
-
-            .kurs-dieta-group .kurs-dieta-fetch label {
                 text-align: center;
             }
 
@@ -875,19 +882,20 @@
                 <h2><span class="section-icon">⚙️</span> Sekcja B: Parametry rozliczenia</h2>
                 <div class="form-grid">
                     <div class="kurs-dieta-group">
-                        <div class="kurs-dieta-fetch">
-                            <label>Kurs na dzień roboczy przed ostatnią zaliczką</label>
-                            <button type="button" class="calculate-btn small-btn secondary" onclick="loadEurRateBeforeLastZaliczka()">Pobierz kurs z NBP 🔄</button>
-                        </div>
-                        <div class="kurs-dieta-input-row">
-                            <div class="kurs-dieta-field">
-                                <label for="kursEuro">Kurs EUR do rozliczenia diet</label>
-                                <div class="kurs-dieta-inline">
-                                    <input type="text" id="kursEuro" value="4.2500" inputmode="decimal" pattern="\d{1,2}\.\d{4}" placeholder="0.0000" readonly oninput="validateKursDieta()">
-                                    <button type="button" class="kurs-lock-btn" id="kursDietaLockBtn" onclick="toggleKursDietaLock()" title="Odblokuj do edycji ręcznej">🔒</button>
+                        <div class="kurs-dieta-top-label">Kurs EUR do rozliczenia diet</div>
+                        <div class="kurs-dieta-row">
+                            <div class="kurs-dieta-fetch">
+                                <button type="button" class="calculate-btn small-btn secondary" onclick="loadEurRateBeforeLastZaliczka()">Pobierz kurs z NBP 🔄</button>
+                            </div>
+                            <div class="kurs-dieta-input-row">
+                                <div class="kurs-dieta-field">
+                                    <div class="kurs-dieta-inline">
+                                        <input type="text" id="kursEuro" value="4.2500" inputmode="decimal" pattern="\d{1,2}\.\d{4}" placeholder="0.0000" readonly oninput="validateKursDieta()">
+                                        <button type="button" class="kurs-lock-btn" id="kursDietaLockBtn" onclick="toggleKursDietaLock()" title="Odblokuj do edycji ręcznej">🔒</button>
+                                    </div>
+                                    <span class="error-message" id="error-kursEuro">Pole wymagane</span>
+                                    <div class="kurs-dieta-status" id="kursDietaStatus"></div>
                                 </div>
-                                <span class="error-message" id="error-kursEuro">Pole wymagane</span>
-                                <div class="kurs-dieta-status" id="kursDietaStatus"></div>
                             </div>
                         </div>
                     </div>
