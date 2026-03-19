@@ -1187,7 +1187,8 @@
             if (kursInput.readOnly) {
                 // Odblokuj — tryb ręczny
                 kursInput.readOnly = false;
-                kursInput.value = '0.0000';
+                kursInput.value = '';
+                kursInput.placeholder = '0.0000';
                 kursInput.style.color = '#e74c3c';
                 btn.textContent = '✏️';
                 btn.classList.add('unlocked');
@@ -1200,6 +1201,7 @@
                 // Zablokuj — powrót do automatycznego
                 kursInput.readOnly = true;
                 kursInput.style.color = '';
+                kursInput.placeholder = '0.0000';
                 btn.textContent = '🔒';
                 btn.classList.remove('unlocked');
                 btn.title = 'Odblokuj do edycji ręcznej';
