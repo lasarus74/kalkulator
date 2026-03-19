@@ -883,7 +883,7 @@
                             <div class="kurs-dieta-field">
                                 <label for="kursEuro">Kurs EUR do rozliczenia diet</label>
                                 <div class="kurs-dieta-inline">
-                                    <input type="number" id="kursEuro" value="4.25" step="0.0001" min="0" readonly oninput="validateKursDieta()">
+                                    <input type="text" id="kursEuro" value="4.2500" inputmode="decimal" pattern="\d{1,2}\.\d{4}" placeholder="0.0000" readonly oninput="validateKursDieta()">
                                     <button type="button" class="kurs-lock-btn" id="kursDietaLockBtn" onclick="toggleKursDietaLock()" title="Odblokuj do edycji ręcznej">🔒</button>
                                 </div>
                                 <span class="error-message" id="error-kursEuro">Pole wymagane</span>
@@ -1212,15 +1212,19 @@
 
         // ---------------------------------------------------------------
         // Walidacja koloru pola kursu EUR diet w trybie ręcznym.
-        // Czerwony = 0 lub puste, Zielony = prawidłowa wartość > 0.
+        // Format prawidłowy: 1-2 cyfry, kropka, dokładnie 4 cyfry (np. 4.2500, 12.3456)
+        // Wartość musi być > 0 aby pole stało się zielone.
         // ---------------------------------------------------------------
         function validateKursDieta() {
             const kursInput = document.getElementById('kursEuro');
-            if (kursInput.readOnly) return; // Nie waliduj w trybie automatycznym
+            if (kursInput.readOnly) return;
 
-            const val = parseFloat(kursInput.value) || 0;
+            const val = kursInput.value;
             const statusEl = document.getElementById('kursDietaStatus');
-            if (val > 0) {
+            const validFormat = /^\d{1,2}\.\d{4}$/.test(val);
+            const numVal = parseFloat(val) || 0;
+
+            if (validFormat && numVal > 0) {
                 kursInput.style.color = '#28a745';
                 if (statusEl) {
                     statusEl.textContent = 'Kurs uzupełniony ręcznie';
@@ -1229,7 +1233,7 @@
             } else {
                 kursInput.style.color = '#e74c3c';
                 if (statusEl) {
-                    statusEl.textContent = 'Tryb ręczny — wpisz kurs samodzielnie';
+                    statusEl.textContent = validFormat ? 'Tryb ręczny — wpisz kurs samodzielnie' : 'Wymagany format: X.XXXX (np. 4.2500)';
                     statusEl.style.color = '#e74c3c';
                 }
             }
