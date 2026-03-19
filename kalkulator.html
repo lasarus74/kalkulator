@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator Kosztów Pracownika</title>
+    <title>Kalkulator Kosztów Pracownika v2.0</title>
     <style>
         * {
             margin: 0;
@@ -35,7 +35,6 @@
             color: white;
             padding: 30px;
             text-align: center;
-            position: relative;
         }
 
         .header h1 {
@@ -67,8 +66,7 @@
             align-items: center;
         }
 
-        .input-section h2::before {
-            content: "⚙️";
+        .input-section h2 .section-icon {
             margin-right: 10px;
             font-size: 24px;
         }
@@ -91,31 +89,26 @@
             margin-bottom: 8px;
         }
 
-        input,
-        select {
+        input, select {
             padding: 12px 15px;
             border: 2px solid #e0e0e0;
             border-radius: 10px;
             font-size: 16px;
             transition: all 0.3s ease;
-            width: 100%;
         }
 
-        input:focus,
-        select:focus {
+        input:focus, select:focus {
             outline: none;
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
-        input.error,
-        select.error {
+        input.error {
             border-color: #e74c3c;
             background-color: #fff5f5;
         }
 
-        input.error:focus,
-        select.error:focus {
+        input.error:focus {
             border-color: #e74c3c;
             box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
         }
@@ -155,125 +148,6 @@
             transform: translateY(0);
         }
 
-        .small-btn {
-            padding: 10px 14px;
-            font-size: 14px;
-            border-radius: 10px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .small-btn.secondary {
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-        }
-
-        .small-btn.secondary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 8px 18px rgba(102, 126, 234, 0.25);
-        }
-
-        .section-note {
-            background: rgba(102, 126, 234, 0.08);
-            color: #4e5ab5;
-            border: 1px solid rgba(102, 126, 234, 0.18);
-            border-radius: 12px;
-            padding: 12px 14px;
-            font-size: 13px;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-
-        .zaliczki-list {
-            display: grid;
-            gap: 16px;
-        }
-
-        .zaliczka-row {
-            background: white;
-            border: 1px solid #e4e8f5;
-            border-radius: 14px;
-            padding: 18px;
-            box-shadow: 0 4px 14px rgba(102, 126, 234, 0.06);
-        }
-
-        .zaliczka-row-title {
-            color: #667eea;
-            font-size: 15px;
-            font-weight: 700;
-            margin-bottom: 14px;
-        }
-
-        .zaliczka-grid {
-            display: grid;
-            grid-template-columns: minmax(180px, 1.3fr) minmax(155px, 1fr) minmax(150px, 0.9fr) minmax(130px, 0.7fr);
-            gap: 14px;
-            align-items: start;
-        }
-
-        .zaliczka-status {
-            min-height: 20px;
-            color: #666;
-            font-size: 12px;
-            line-height: 1.4;
-            margin-top: 6px;
-        }
-
-        .zaliczka-status.ok {
-            color: #1f7a3a;
-        }
-
-        .zaliczka-status.warning {
-            color: #b86b00;
-        }
-
-        .zaliczka-status.manual {
-            color: #5b3fd1;
-        }
-
-        .manual-toggle {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 10px;
-            color: #555;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .manual-toggle input {
-            width: auto;
-            min-width: auto;
-            padding: 0;
-            margin: 0;
-        }
-
-        .summary-box {
-            margin-top: 20px;
-            background: white;
-            border-radius: 14px;
-            border: 1px solid #dfe5fb;
-            padding: 16px 18px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .summary-box strong {
-            color: #667eea;
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
-        }
-
         .results-section {
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             border-radius: 15px;
@@ -288,8 +162,7 @@
             align-items: center;
         }
 
-        .results-section h2::before {
-            content: "📊";
+        .results-section h2 .section-icon {
             margin-right: 10px;
             font-size: 24px;
         }
@@ -362,7 +235,6 @@
         .detail-row {
             display: flex;
             justify-content: space-between;
-            gap: 15px;
             padding: 10px 0;
             border-bottom: 1px solid #f0f0f0;
         }
@@ -380,18 +252,193 @@
             color: #333;
             font-weight: 600;
             font-size: 14px;
-            text-align: right;
         }
 
-        .detail-subsection {
-            margin-bottom: 20px;
-            padding: 16px;
-            background: rgba(255, 255, 255, 0.65);
+        /* ===== STYLE DLA SEKCJI ZALICZEK ===== */
+
+        .zaliczka-row {
+            background: white;
             border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            border: 2px solid #e8ecf1;
+            transition: border-color 0.3s ease;
         }
 
-        .detail-subsection:last-child {
-            margin-bottom: 0;
+        .zaliczka-row:hover {
+            border-color: #667eea;
+        }
+
+        .zaliczka-row-header {
+            font-size: 13px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .zaliczka-fields {
+            display: grid;
+            grid-template-columns: 2fr 1.5fr 1.5fr;
+            gap: 12px;
+            align-items: end;
+        }
+
+        .zaliczka-fields input {
+            padding: 10px 12px;
+            font-size: 14px;
+        }
+
+        .zaliczka-fields label {
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .zaliczka-kurs-group {
+            display: flex;
+            gap: 6px;
+            align-items: end;
+        }
+
+        .zaliczka-kurs-group input {
+            flex: 1;
+        }
+
+        .zaliczka-kurs-group .kurs-lock-btn {
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: #f8f9fa;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .zaliczka-kurs-group .kurs-lock-btn:hover {
+            border-color: #667eea;
+            background: #eef0ff;
+        }
+
+        .zaliczka-kurs-group .kurs-lock-btn.unlocked {
+            border-color: #f0ad4e;
+            background: #fff8ec;
+        }
+
+        .zaliczka-status {
+            font-size: 11px;
+            color: #888;
+            margin-top: 4px;
+            min-height: 16px;
+            grid-column: 1 / -1;
+        }
+
+        .zaliczka-status.ok { color: #28a745; }
+        .zaliczka-status.warn { color: #f0ad4e; }
+        .zaliczka-status.err { color: #e74c3c; }
+
+        .zaliczka-summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .zaliczka-summary-item {
+            text-align: center;
+        }
+
+        .zaliczka-summary-item .summary-label {
+            font-size: 11px;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .zaliczka-summary-item .summary-value {
+            font-size: 22px;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        /* Sekcja informacyjna — przyciemniona */
+        .info-section {
+            background: #f0f1f3;
+            border-radius: 15px;
+            padding: 25px 30px;
+            margin-bottom: 30px;
+            border: 2px dashed #d0d4da;
+        }
+
+        .info-section h2 {
+            color: #999;
+            font-size: 18px;
+        }
+
+        .info-note {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .info-section input {
+            background: #f8f9fa;
+            color: #888;
+        }
+
+        /* ===== RESPONSIVE ===== */
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 20px;
+                line-height: 1.3;
+                margin-bottom: 10px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .zaliczka-fields {
+                grid-template-columns: 1fr;
+            }
+
+            .header-badge {
+                position: static !important;
+                display: block;
+                margin: 0 auto 25px;
+                width: fit-content;
+                text-align: center;
+            }
+            
+            .header {
+                padding: 25px 15px !important;
+                text-align: center !important;
+            }
+
+            .header p {
+                font-size: 13px;
+            }
+
+            .zaliczka-summary {
+                flex-direction: column;
+                align-items: center;
+            }
         }
 
         .footer {
@@ -448,146 +495,127 @@
             transform: scale(1.05);
         }
 
-        @media (max-width: 768px) {
+        .header {
+            position: relative;
+        }
+    
+        .small-btn {
+            padding: 10px 14px;
+            font-size: 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .small-btn.secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .small-btn.secondary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 18px rgba(102, 126, 234, 0.25);
+        }
+
+        /* ===== DRUKOWANIE ===== */
+
+        @page {
+            size: A4;
+            margin: 8mm;
+        }
+
+        @media print {
+            body {
+                background: white !important;
+                padding: 0 !important;
+                display: block !important;
+            }
+
+            .container {
+                box-shadow: none !important;
+                max-width: 100% !important;
+                border-radius: 0 !important;
+            }
+
+            .header-badge,
+            .calculate-btn,
+            .small-btn,
+            .kurs-lock-btn {
+                display: none !important;
+            }
+
+            .header {
+                padding: 12px !important;
+            }
+
             .content {
-                padding: 20px;
+                padding: 12px !important;
+            }
+
+            .input-section,
+            .info-section,
+            .results-section {
+                padding: 12px !important;
+                margin-bottom: 12px !important;
             }
 
             .header h1 {
-                font-size: 20px;
-                line-height: 1.3;
-                margin-bottom: 10px;
+                font-size: 18px !important;
             }
 
-            .form-grid,
-            .results-grid,
-            .info-grid,
-            .zaliczka-grid {
-                grid-template-columns: 1fr;
+            label,
+            .detail-label,
+            .detail-value,
+            .result-subtitle,
+            .footer {
+                font-size: 11px !important;
             }
 
-            .summary-box,
+            .result-value {
+                font-size: 20px !important;
+            }
+
             .detail-row {
-                flex-direction: column;
-                align-items: flex-start;
+                padding: 6px 0 !important;
             }
 
-            .detail-value {
-                text-align: left;
+            .result-card {
+                padding: 12px !important;
             }
 
-            .header-badge {
-                position: static !important;
-                display: block;
-                margin: 0 auto 25px;
-                width: fit-content;
-                text-align: center;
-            }
-            
-            .header {
-                padding: 25px 15px !important;
-                text-align: center !important;
+            input,
+            select {
+                border: 1px solid #ccc !important;
+                box-shadow: none !important;
+                padding: 6px 8px !important;
+                font-size: 11px !important;
             }
 
-            .header p {
-                font-size: 13px;
+            .results-section,
+            .input-section,
+            .info-section,
+            .result-card {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            .footer {
+                background: white !important;
+            }
+
+            .zaliczka-row {
+                padding: 8px 12px !important;
+                margin-bottom: 6px !important;
+            }
+
+            .zaliczka-summary {
+                padding: 8px 12px !important;
             }
         }
-
-@page {
-    size: A4;
-    margin: 8mm;
-}
-
-@media print {
-    body {
-        background: white !important;
-        padding: 0 !important;
-        display: block !important;
-    }
-
-    .container {
-        box-shadow: none !important;
-        max-width: 100% !important;
-        border-radius: 0 !important;
-    }
-
-    /* Ukrywamy elementy niefunkcjonalne na wydruku */
-    .header-badge,
-    .calculate-btn,
-    .small-btn,
-    .manual-toggle {
-        display: none !important;
-    }
-
-    /* Kompresja layoutu */
-    .header {
-        padding: 12px !important;
-    }
-
-    .content {
-        padding: 12px !important;
-    }
-
-    .input-section,
-    .results-section {
-        padding: 12px !important;
-        margin-bottom: 12px !important;
-    }
-
-    /* Mniejsze fonty – kluczowe, żeby zmieścić się na 1 stronie */
-    .header h1 {
-        font-size: 18px !important;
-    }
-
-    label,
-    .detail-label,
-    .detail-value,
-    .result-subtitle,
-    .footer,
-    .zaliczka-status,
-    .section-note {
-        font-size: 11px !important;
-    }
-
-    .result-value {
-        font-size: 20px !important;
-    }
-
-    /* Zmniejszamy odstępy w szczegółach */
-    .detail-row {
-        padding: 6px 0 !important;
-    }
-
-    .result-card,
-    .zaliczka-row,
-    .summary-box {
-        padding: 12px !important;
-    }
-
-    input,
-    select {
-        border: 1px solid #ccc !important;
-        box-shadow: none !important;
-        padding: 6px 8px !important;
-        font-size: 11px !important;
-    }
-
-    /* Staramy się nie łamać sekcji */
-    .results-section,
-    .input-section,
-    .result-card,
-    .zaliczka-row,
-    .detail-subsection {
-        break-inside: avoid;
-        page-break-inside: avoid;
-    }
-
-    .footer {
-        background: white !important;
-    }
-}
-</style>
+    </style>
 </head>
 <body>
     <div class="container">
@@ -596,139 +624,133 @@
                 Powered by AItronix ⚡
             </a>
             <h1>💼 Kalkulator Kosztów Pracownika</h1>
-            <p>Model 2.0: obliczenia od realnych zaliczek netto wypłaconych pracownikowi</p>
+            <p>Oblicz koszty zatrudnienia na podstawie realnych wypłat (zaliczek)</p>
         </div>
 
         <div class="content">
+
+            <!-- ═══════════════════════════════════════════════════════════
+                 SEKCJA A: ZALICZKI (wypłaty netto)
+                 Nowa baza obliczeń — suma zaliczek zastępuje stawka × kurs × godziny
+                 ═══════════════════════════════════════════════════════════ -->
             <div class="input-section">
-                <h2>Sekcja A: Zaliczki (wypłaty netto)</h2>
-                <div class="section-note">
-                    W tej sekcji wpisz rzeczywiste transze netto wypłacone pracownikowi w PLN. Każda zaliczka może mieć inną datę i inny kurs EUR z dnia wypłaty.
-                </div>
+                <h2><span class="section-icon">💰</span> Sekcja A: Zaliczki (wypłaty netto)</h2>
 
-                <div class="zaliczki-list">
-                    <div class="zaliczka-row">
-                        <div class="zaliczka-row-title">Zaliczka 1</div>
-                        <div class="zaliczka-grid">
-                            <div class="form-group">
-                                <label for="zaliczka1_kwota">Kwota PLN</label>
-                                <input type="number" id="zaliczka1_kwota" step="0.01" min="0" placeholder="np. 4500.00">
-                            </div>
-                            <div class="form-group">
-                                <label for="zaliczka1_data">Data</label>
-                                <input type="date" id="zaliczka1_data">
-                            </div>
-                            <div class="form-group">
-                                <label for="zaliczka1_kurs">Kurs EUR</label>
-                                <input type="number" id="zaliczka1_kurs" step="0.0001" min="0" readonly placeholder="pobierany automatycznie">
-                                <label class="manual-toggle" for="zaliczka1_manual">
-                                    <input type="checkbox" id="zaliczka1_manual">
-                                    Ręcznie
-                                </label>
-                            </div>
-                            <div class="form-group">
-                                <label>Status</label>
-                                <span class="zaliczka-status" id="zaliczka1_status">Wybierz datę lub wpisz dane ręcznie.</span>
-                                <span class="error-message" id="error-zaliczka1">Sprawdź dane zaliczki.</span>
+                <!-- Zaliczka 1 -->
+                <div class="zaliczka-row" id="zaliczkaRow1">
+                    <div class="zaliczka-row-header">Zaliczka 1</div>
+                    <div class="zaliczka-fields">
+                        <div class="form-group">
+                            <label for="zaliczka1_kwota">Kwota (PLN)</label>
+                            <input type="number" id="zaliczka1_kwota" step="0.01" min="0" placeholder="np. 5000.00" oninput="updateZaliczkaSummary()">
+                        </div>
+                        <div class="form-group">
+                            <label for="zaliczka1_data">Data wypłaty</label>
+                            <input type="date" id="zaliczka1_data" onchange="onZaliczkaDateChange(1)">
+                        </div>
+                        <div class="form-group">
+                            <label for="zaliczka1_kurs">Kurs EUR</label>
+                            <div class="zaliczka-kurs-group">
+                                <input type="number" id="zaliczka1_kurs" step="0.0001" min="0" placeholder="4.2500" readonly oninput="updateZaliczkaSummary()">
+                                <button type="button" class="kurs-lock-btn" onclick="toggleKursLock(1)" title="Odblokuj do edycji ręcznej">🔒</button>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="zaliczka-row">
-                        <div class="zaliczka-row-title">Zaliczka 2</div>
-                        <div class="zaliczka-grid">
-                            <div class="form-group">
-                                <label for="zaliczka2_kwota">Kwota PLN</label>
-                                <input type="number" id="zaliczka2_kwota" step="0.01" min="0" placeholder="np. 3200.00">
-                            </div>
-                            <div class="form-group">
-                                <label for="zaliczka2_data">Data</label>
-                                <input type="date" id="zaliczka2_data">
-                            </div>
-                            <div class="form-group">
-                                <label for="zaliczka2_kurs">Kurs EUR</label>
-                                <input type="number" id="zaliczka2_kurs" step="0.0001" min="0" readonly placeholder="pobierany automatycznie">
-                                <label class="manual-toggle" for="zaliczka2_manual">
-                                    <input type="checkbox" id="zaliczka2_manual">
-                                    Ręcznie
-                                </label>
-                            </div>
-                            <div class="form-group">
-                                <label>Status</label>
-                                <span class="zaliczka-status" id="zaliczka2_status">Wybierz datę lub wpisz dane ręcznie.</span>
-                                <span class="error-message" id="error-zaliczka2">Sprawdź dane zaliczki.</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="zaliczka-row">
-                        <div class="zaliczka-row-title">Zaliczka 3</div>
-                        <div class="zaliczka-grid">
-                            <div class="form-group">
-                                <label for="zaliczka3_kwota">Kwota PLN</label>
-                                <input type="number" id="zaliczka3_kwota" step="0.01" min="0" placeholder="np. 2100.00">
-                            </div>
-                            <div class="form-group">
-                                <label for="zaliczka3_data">Data</label>
-                                <input type="date" id="zaliczka3_data">
-                            </div>
-                            <div class="form-group">
-                                <label for="zaliczka3_kurs">Kurs EUR</label>
-                                <input type="number" id="zaliczka3_kurs" step="0.0001" min="0" readonly placeholder="pobierany automatycznie">
-                                <label class="manual-toggle" for="zaliczka3_manual">
-                                    <input type="checkbox" id="zaliczka3_manual">
-                                    Ręcznie
-                                </label>
-                            </div>
-                            <div class="form-group">
-                                <label>Status</label>
-                                <span class="zaliczka-status" id="zaliczka3_status">Wybierz datę lub wpisz dane ręcznie.</span>
-                                <span class="error-message" id="error-zaliczka3">Sprawdź dane zaliczki.</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="zaliczka-row">
-                        <div class="zaliczka-row-title">Zaliczka 4</div>
-                        <div class="zaliczka-grid">
-                            <div class="form-group">
-                                <label for="zaliczka4_kwota">Kwota PLN</label>
-                                <input type="number" id="zaliczka4_kwota" step="0.01" min="0" placeholder="np. 1800.00">
-                            </div>
-                            <div class="form-group">
-                                <label for="zaliczka4_data">Data</label>
-                                <input type="date" id="zaliczka4_data">
-                            </div>
-                            <div class="form-group">
-                                <label for="zaliczka4_kurs">Kurs EUR</label>
-                                <input type="number" id="zaliczka4_kurs" step="0.0001" min="0" readonly placeholder="pobierany automatycznie">
-                                <label class="manual-toggle" for="zaliczka4_manual">
-                                    <input type="checkbox" id="zaliczka4_manual">
-                                    Ręcznie
-                                </label>
-                            </div>
-                            <div class="form-group">
-                                <label>Status</label>
-                                <span class="zaliczka-status" id="zaliczka4_status">Wybierz datę lub wpisz dane ręcznie.</span>
-                                <span class="error-message" id="error-zaliczka4">Sprawdź dane zaliczki.</span>
-                            </div>
-                        </div>
+                        <div class="zaliczka-status" id="zaliczka1_status"></div>
                     </div>
                 </div>
 
-                <div class="summary-box">
-                    <div><strong>Suma zaliczek:</strong> <span id="zaliczkiSummaryPLN">0.00 PLN</span></div>
-                    <div><strong>Po przeliczeniu:</strong> <span id="zaliczkiSummaryEUR">0.00 EUR</span></div>
+                <!-- Zaliczka 2 -->
+                <div class="zaliczka-row" id="zaliczkaRow2">
+                    <div class="zaliczka-row-header">Zaliczka 2</div>
+                    <div class="zaliczka-fields">
+                        <div class="form-group">
+                            <label for="zaliczka2_kwota">Kwota (PLN)</label>
+                            <input type="number" id="zaliczka2_kwota" step="0.01" min="0" placeholder="np. 3000.00" oninput="updateZaliczkaSummary()">
+                        </div>
+                        <div class="form-group">
+                            <label for="zaliczka2_data">Data wypłaty</label>
+                            <input type="date" id="zaliczka2_data" onchange="onZaliczkaDateChange(2)">
+                        </div>
+                        <div class="form-group">
+                            <label for="zaliczka2_kurs">Kurs EUR</label>
+                            <div class="zaliczka-kurs-group">
+                                <input type="number" id="zaliczka2_kurs" step="0.0001" min="0" placeholder="4.2500" readonly oninput="updateZaliczkaSummary()">
+                                <button type="button" class="kurs-lock-btn" onclick="toggleKursLock(2)" title="Odblokuj do edycji ręcznej">🔒</button>
+                            </div>
+                        </div>
+                        <div class="zaliczka-status" id="zaliczka2_status"></div>
+                    </div>
                 </div>
-                <span class="error-message" id="error-zaliczki-global">Wpisz co najmniej jedną poprawną zaliczkę.</span>
+
+                <!-- Zaliczka 3 -->
+                <div class="zaliczka-row" id="zaliczkaRow3">
+                    <div class="zaliczka-row-header">Zaliczka 3</div>
+                    <div class="zaliczka-fields">
+                        <div class="form-group">
+                            <label for="zaliczka3_kwota">Kwota (PLN)</label>
+                            <input type="number" id="zaliczka3_kwota" step="0.01" min="0" placeholder="np. 2000.00" oninput="updateZaliczkaSummary()">
+                        </div>
+                        <div class="form-group">
+                            <label for="zaliczka3_data">Data wypłaty</label>
+                            <input type="date" id="zaliczka3_data" onchange="onZaliczkaDateChange(3)">
+                        </div>
+                        <div class="form-group">
+                            <label for="zaliczka3_kurs">Kurs EUR</label>
+                            <div class="zaliczka-kurs-group">
+                                <input type="number" id="zaliczka3_kurs" step="0.0001" min="0" placeholder="4.2500" readonly oninput="updateZaliczkaSummary()">
+                                <button type="button" class="kurs-lock-btn" onclick="toggleKursLock(3)" title="Odblokuj do edycji ręcznej">🔒</button>
+                            </div>
+                        </div>
+                        <div class="zaliczka-status" id="zaliczka3_status"></div>
+                    </div>
+                </div>
+
+                <!-- Zaliczka 4 -->
+                <div class="zaliczka-row" id="zaliczkaRow4">
+                    <div class="zaliczka-row-header">Zaliczka 4</div>
+                    <div class="zaliczka-fields">
+                        <div class="form-group">
+                            <label for="zaliczka4_kwota">Kwota (PLN)</label>
+                            <input type="number" id="zaliczka4_kwota" step="0.01" min="0" placeholder="np. 500.00" oninput="updateZaliczkaSummary()">
+                        </div>
+                        <div class="form-group">
+                            <label for="zaliczka4_data">Data wypłaty</label>
+                            <input type="date" id="zaliczka4_data" onchange="onZaliczkaDateChange(4)">
+                        </div>
+                        <div class="form-group">
+                            <label for="zaliczka4_kurs">Kurs EUR</label>
+                            <div class="zaliczka-kurs-group">
+                                <input type="number" id="zaliczka4_kurs" step="0.0001" min="0" placeholder="4.2500" readonly oninput="updateZaliczkaSummary()">
+                                <button type="button" class="kurs-lock-btn" onclick="toggleKursLock(4)" title="Odblokuj do edycji ręcznej">🔒</button>
+                            </div>
+                        </div>
+                        <div class="zaliczka-status" id="zaliczka4_status"></div>
+                    </div>
+                </div>
+
+                <!-- Podsumowanie zaliczek — aktualizowane na żywo -->
+                <div class="zaliczka-summary">
+                    <div class="zaliczka-summary-item">
+                        <div class="summary-label">Suma zaliczek (PLN)</div>
+                        <div class="summary-value" id="sumZaliczekPLN">0.00 PLN</div>
+                    </div>
+                    <div class="zaliczka-summary-item">
+                        <div class="summary-label">Suma zaliczek (EUR)</div>
+                        <div class="summary-value" id="sumZaliczekEUR">0.00 EUR</div>
+                    </div>
+                </div>
             </div>
 
+            <!-- ═══════════════════════════════════════════════════════════
+                 SEKCJA B: PARAMETRY ROZLICZENIA
+                 Diety, ZUS, PIT — bez zmian w logice
+                 ═══════════════════════════════════════════════════════════ -->
             <div class="input-section">
-                <h2>Sekcja B: Parametry rozliczenia</h2>
+                <h2><span class="section-icon">⚙️</span> Sekcja B: Parametry rozliczenia</h2>
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="kursEuro">Kurs EUR do rozliczenia diet</label>
-                        <input type="number" id="kursEuro" value="4.25" step="0.01" min="0">
+                        <input type="number" id="kursEuro" value="4.25" step="0.0001" min="0">
                         <span class="error-message" id="error-kursEuro">Pole wymagane</span>
                     </div>
                     <div class="form-group">
@@ -747,11 +769,12 @@
                     </div>
                     <div class="form-group">
                         <label for="wysokoscDiety">Wysokość diety w EURO</label>
-                        <select id="dietCountry" onchange="applyDietFromCountry()">
+                        <select id="dietCountry" style="padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 16px; transition: all 0.3s ease; margin-bottom: 10px;"
+                                onchange="applyDietFromCountry()">
                             <option value="">Wybierz kraj (dieta)</option>
                         </select>
-                        <div class="result-subtitle" id="dietStatus" style="margin-top:8px;margin-bottom:8px;"></div>
-                        <input type="number" id="wysokoscDiety" value="55" step="0.01" min="0">
+                        <div class="result-subtitle" id="dietStatus" style="margin-top:-6px;margin-bottom:8px;"></div>
+                        <input type="number" id="wysokoscDiety" value="49" step="0.01" min="0">
                         <span class="error-message" id="error-wysokoscDiety">Pole wymagane</span>
                     </div>
                     <div class="form-group">
@@ -762,28 +785,37 @@
                 </div>
             </div>
 
-            <div class="input-section">
-                <h2>Sekcja C: Dane informacyjne (dla spółki)</h2>
-                <div class="section-note">Pola poniżej nie wpływają na obliczenia — służą wyłącznie jako informacja dla firmy.</div>
-                <div class="info-grid">
+            <!-- ═══════════════════════════════════════════════════════════
+                 SEKCJA C: DANE INFORMACYJNE (dla spółki)
+                 Nie wpływają na obliczenia — tylko referencja
+                 ═══════════════════════════════════════════════════════════ -->
+            <div class="info-section">
+                <h2><span class="section-icon">ℹ️</span> Sekcja C: Dane informacyjne (dla spółki)</h2>
+                <div class="info-note">Pola poniżej nie wpływają na obliczenia — służą wyłącznie jako informacja dla firmy.</div>
+                <div class="form-grid">
                     <div class="form-group">
                         <label for="stawkaBruttoEuro">Stawka netto EUR/h (informacyjnie)</label>
-                        <input type="number" id="stawkaBruttoEuro" value="21" step="0.01" min="0" placeholder="opcjonalnie">
-                        <span class="error-message" id="error-stawkaBruttoEuro">Pole wymagane</span>
+                        <input type="number" id="stawkaBruttoEuro" value="" step="0.01" min="0" placeholder="np. 21.00">
                     </div>
                     <div class="form-group">
                         <label for="iloscGodzin">Ilość godzin w miesiącu (informacyjnie)</label>
-                        <input type="number" id="iloscGodzin" value="176" step="1" min="0" placeholder="opcjonalnie">
-                        <span class="error-message" id="error-iloscGodzin">Pole wymagane</span>
+                        <input type="number" id="iloscGodzin" value="" step="1" min="0" placeholder="np. 176">
                     </div>
                 </div>
-                <button class="calculate-btn" onclick="calculate(true)">Oblicz 🧮</button>
             </div>
 
-            <div class="results-section" id="resultsSection" style="display: none;">
-                <h2>Wyniki Obliczeń</h2>
+            <!-- Przycisk obliczania -->
+            <button class="calculate-btn" onclick="calculate()">Oblicz 🧮</button>
+
+            <!-- ═══════════════════════════════════════════════════════════
+                 WYNIKI
+                 ═══════════════════════════════════════════════════════════ -->
+            <div class="results-section" id="resultsSection" style="display: none; margin-top: 30px;">
+                <h2><span class="section-icon">📊</span> Wyniki Obliczeń</h2>
+
+                <!-- Dane pracownika -->
                 <div class="input-section" style="margin-bottom: 25px;">
-                    <h2 style="margin-bottom: 15px;">Dane Pracownika</h2>
+                    <h2 style="margin-bottom: 15px;"><span class="section-icon">👤</span> Dane Pracownika</h2>
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="imie">Imię</label>
@@ -796,9 +828,10 @@
                     </div>
                 </div>
 
+                <!-- Karty wyników -->
                 <div class="results-grid">
                     <div class="result-card highlight-card">
-                        <h3>Do wypłaty dla pracownika</h3>
+                        <h3>Do wypłaty dla pracownika (suma zaliczek)</h3>
                         <div class="result-value" id="wyplataPLN">0 PLN</div>
                         <div class="result-subtitle" id="wyplataEURO">0 EUR</div>
                         <div class="result-subtitle" id="wyplataGodzina">0 EUR/h</div>
@@ -812,72 +845,70 @@
                     </div>
                 </div>
 
+                <!-- Szczegóły zaliczek -->
+                <div class="details-section">
+                    <h3>💰 Podsumowanie zaliczek</h3>
+                    <div id="zaliczkiDetails">
+                        <!-- Wypełniane dynamicznie przez JS -->
+                    </div>
+                    <div class="detail-row" style="font-weight: 700; border-top: 2px solid #667eea; margin-top: 5px; padding-top: 10px;">
+                        <span class="detail-label"><strong>SUMA ZALICZEK</strong></span>
+                        <span class="detail-value" id="sumaZaliczekWynik">0 PLN / 0 EUR</span>
+                    </div>
+                </div>
+
+                <!-- Szczegóły obliczeń — identyczne jak w v1 -->
                 <div class="details-section">
                     <h3>🔍 Szczegóły Obliczeń</h3>
 
-                    <div class="detail-subsection">
-                        <h3>💸 Podsumowanie zaliczek</h3>
-                        <div id="zaliczkiDetailsList"></div>
-                        <div class="detail-row">
-                            <span class="detail-label">Suma zaliczek</span>
-                            <span class="detail-value" id="sumaZaliczekPLN">0 PLN</span>
-                        </div>
-                        <div class="detail-row">
-                            <span class="detail-label">Suma zaliczek po przeliczeniu na EUR</span>
-                            <span class="detail-value" id="sumaZaliczekEUR">0 EUR</span>
-                        </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Wynagrodzenie brutto / miesiąc</span>
+                        <span class="detail-value" id="wynBrutto">0 PLN</span>
                     </div>
 
-                    <div class="detail-subsection">
-                        <div class="detail-row">
-                            <span class="detail-label">Wynagrodzenie brutto / miesiąc</span>
-                            <span class="detail-value" id="wynBrutto">0 PLN</span>
-                        </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Dieta odliczana do ZUS (100%)</span>
+                        <span class="detail-value" id="dietaZUS">0 PLN</span>
+                    </div>
 
-                        <div class="detail-row">
-                            <span class="detail-label">Dieta odliczana do ZUS (100%)</span>
-                            <span class="detail-value" id="dietaZUS">0 PLN</span>
-                        </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Dieta odliczana do PIT (30%)</span>
+                        <span class="detail-value" id="dietaPIT">0 PLN</span>
+                    </div>
 
-                        <div class="detail-row">
-                            <span class="detail-label">Dieta odliczana do PIT (30%)</span>
-                            <span class="detail-value" id="dietaPIT">0 PLN</span>
-                        </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Podstawa do ZUS (po dietach, min. średnia)</span>
+                        <span class="detail-value" id="podstawaZUS">0 PLN</span>
+                    </div>
 
-                        <div class="detail-row">
-                            <span class="detail-label">Podstawa do ZUS (po dietach, min. średnia)</span>
-                            <span class="detail-value" id="podstawaZUS">0 PLN</span>
-                        </div>
+                    <div class="detail-row">
+                        <span class="detail-label">ZUS pracownika (13.71%)</span>
+                        <span class="detail-value" id="zusPracownik">0 PLN</span>
+                    </div>
 
-                        <div class="detail-row">
-                            <span class="detail-label">ZUS pracownika (13.71%)</span>
-                            <span class="detail-value" id="zusPracownik">0 PLN</span>
-                        </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Składka zdrowotna (9%)</span>
+                        <span class="detail-value" id="zdrowotna">0 PLN</span>
+                    </div>
 
-                        <div class="detail-row">
-                            <span class="detail-label">Składka zdrowotna (9%)</span>
-                            <span class="detail-value" id="zdrowotna">0 PLN</span>
-                        </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Koszty pracownicze (PIT)</span>
+                        <span class="detail-value" id="kosztyPIT">0 PLN</span>
+                    </div>
 
-                        <div class="detail-row">
-                            <span class="detail-label">Koszty pracownicze (PIT)</span>
-                            <span class="detail-value" id="kosztyPIT">0 PLN</span>
-                        </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Podstawa PIT (G)</span>
+                        <span class="detail-value" id="podstawaPIT">0 PLN</span>
+                    </div>
 
-                        <div class="detail-row">
-                            <span class="detail-label">Podstawa PIT (G)</span>
-                            <span class="detail-value" id="podstawaPIT">0 PLN</span>
-                        </div>
+                    <div class="detail-row">
+                        <span class="detail-label">PIT (zaliczka 12% / 32%)</span>
+                        <span class="detail-value" id="pit">0 PLN</span>
+                    </div>
 
-                        <div class="detail-row">
-                            <span class="detail-label">PIT (zaliczka 12% / 32%)</span>
-                            <span class="detail-value" id="pit">0 PLN</span>
-                        </div>
-
-                        <div class="detail-row">
-                            <span class="detail-label">ZUS pracodawcy (19.52%)</span>
-                            <span class="detail-value" id="zusPracodawca">0 PLN</span>
-                        </div>
+                    <div class="detail-row">
+                        <span class="detail-label">ZUS pracodawcy (19.52%)</span>
+                        <span class="detail-value" id="zusPracodawca">0 PLN</span>
                     </div>
                 </div>
 
@@ -887,21 +918,19 @@
             </div>
         </div>
 
+        <!-- Stopka -->
         <div class="footer">
             © 2026 Kalkulator Kosztów Pracownika | Wszystkie obliczenia są szacunkowe
             <div class="branding">
                 <a href="https://aitronix.co.uk/" target="_blank" class="branding-link">
                     <svg class="branding-logo" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
-                        <!-- AItronix Logo bez tekstu -->
                         <defs>
                             <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                                 <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
                                 <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
                             </linearGradient>
                         </defs>
-                        <!-- Letter A with tech triangle -->
                         <path d="M 15 35 L 25 15 L 35 35 M 20 28 L 30 28" stroke="url(#logoGradient)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                        <!-- Tech accent -->
                         <circle cx="25" cy="15" r="2" fill="url(#logoGradient)"/>
                     </svg>
                     <span>Wersja 2.0 | Stworzone przez AItronix</span>
@@ -911,82 +940,151 @@
     </div>
 
     <script>
+        // ═══════════════════════════════════════════════════════════════════
+        // POMOCNICZE
+        // ═══════════════════════════════════════════════════════════════════
+
+        // Formatowanie liczby z separatorem tysięcy (spacja) i podaną liczbą miejsc dziesiętnych
         function formatNumber(num, decimals = 2) {
             return num.toFixed(decimals).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
         }
 
-        // Źródła danych na Twoim VPS (Plesk)
+        // Ograniczenie wartości od dołu — jeśli num < minVal, zwraca minVal
+        function clampMin(num, minVal) {
+            return num < minVal ? minVal : num;
+        }
+
+        // ═══════════════════════════════════════════════════════════════════
+        // POBIERANIE DANYCH Z SERWERA (diety, kursy EUR)
+        // ═══════════════════════════════════════════════════════════════════
+
+        // Adresy plików z danymi na serwerze (VPS/Plesk)
         const EUR_URL = "data/eur.json";
         const DIETS_URL = "data/diets.json";
+
+        // Przechowywanie załadowanych diet w pamięci
         window.__diets = null;
 
-   async function loadEurRate() {
-  const status = document.getElementById("eurStatus");
-  const NBP_URL = "https://api.nbp.pl/api/exchangerates/rates/A/EUR/?format=json";
-  const LOCAL_URL = "data/eur.json";
+        // ---------------------------------------------------------------
+        // Pobiera AKTUALNY kurs EUR z NBP (lub fallback z lokalnego pliku).
+        // Używane dla pola "Kurs EUR do rozliczenia diet".
+        // Logika: najpierw NBP API, jeśli nie działa (CORS/sieć) — lokalny eur.json.
+        // ---------------------------------------------------------------
+        async function loadEurRate() {
+            const status = document.getElementById("eurStatus");
+            const NBP_URL = "https://api.nbp.pl/api/exchangerates/rates/A/EUR/?format=json";
+            const LOCAL_URL = "data/eur.json";
+            const MAX_AGE_DAYS = 10; // Maksymalny wiek lokalnego kursu w dniach
 
-  const MAX_AGE_DAYS = 10; // ile dni max akceptujemy dla lokalnego eur.json
+            // Parsuje datę z formatu NBP (YYYY-MM-DD)
+            function parseDate(d) {
+                if (!d) return null;
+                const dt = new Date(d + "T00:00:00Z");
+                return isNaN(dt.getTime()) ? null : dt;
+            }
 
-  function parseDate(d) {
-    // NBP daje YYYY-MM-DD
-    if (!d) return null;
-    const dt = new Date(d + "T00:00:00Z");
-    return isNaN(dt.getTime()) ? null : dt;
-  }
+            // Oblicza ile dni temu był dany kurs
+            function daysOld(dt) {
+                const now = new Date();
+                const ms = now.getTime() - dt.getTime();
+                return Math.floor(ms / (1000 * 60 * 60 * 24));
+            }
 
-  function daysOld(dt) {
-    const now = new Date();
-    const ms = now.getTime() - dt.getTime();
-    return Math.floor(ms / (1000 * 60 * 60 * 24));
-  }
+            // Pobiera kurs z podanego URL (NBP lub lokalny plik)
+            async function fetchRate(url, label) {
+                const res = await fetch(`${url}${url.includes("?") ? "&" : "?"}t=${Date.now()}`, { cache: "no-store" });
+                if (!res.ok) throw new Error(`${label}: HTTP ${res.status}`);
+                const data = await res.json();
+                const mid = data?.rates?.[0]?.mid;
+                const date = data?.rates?.[0]?.effectiveDate;
+                if (typeof mid !== "number") throw new Error(`${label}: brak rates[0].mid`);
+                return { mid, date };
+            }
 
-  async function fetchRate(url, label) {
-    const res = await fetch(`${url}${url.includes("?") ? "&" : "?"}t=${Date.now()}`, { cache: "no-store" });
-    if (!res.ok) throw new Error(`${label}: HTTP ${res.status}`);
-    const data = await res.json();
-    const mid = data?.rates?.[0]?.mid;
-    const date = data?.rates?.[0]?.effectiveDate;
-    if (typeof mid !== "number") throw new Error(`${label}: brak rates[0].mid`);
-    return { mid, date };
-  }
+            // Ustawia pobrany kurs w polu formularza i wyświetla status
+            function applyRate(mid, date, label) {
+                document.getElementById("kursEuro").value = Number(mid).toFixed(4);
+                if (status) status.textContent = `OK (${label}): ${mid} (data: ${date || "brak"})`;
+            }
 
-  function applyRate(mid, date, label) {
-    document.getElementById("kursEuro").value = Number(mid).toFixed(4);
-    if (status) status.textContent = `OK (${label}): ${mid} (data: ${date || "brak"})`;
-    calculate();
-  }
+            // Próba 1: NBP API (aktualny kurs)
+            try {
+                if (status) status.textContent = "Pobieram kurs EUR z NBP…";
+                const nbp = await fetchRate(NBP_URL, "NBP");
+                applyRate(nbp.mid, nbp.date, "NBP");
+                return;
+            } catch (e) {
+                // NBP nie działa (CORS/sieć) → próbujemy lokalny plik
+                try {
+                    if (status) status.textContent = "NBP niedostępny. Sprawdzam lokalny eur.json…";
+                    const local = await fetchRate(LOCAL_URL, "LOCAL");
 
-  try {
-    if (status) status.textContent = "Pobieram kurs EUR z NBP…";
-    const nbp = await fetchRate(NBP_URL, "NBP");
-    applyRate(nbp.mid, nbp.date, "NBP");
-    return;
-  } catch (e) {
-    // NBP nie działa (CORS/sieć) → próbujemy lokalny, ale tylko jeśli nie jest stary
-    try {
-      if (status) status.textContent = "NBP niedostępny. Sprawdzam lokalny eur.json…";
-      const local = await fetchRate(LOCAL_URL, "LOCAL");
+                    const dt = parseDate(local.date);
+                    if (!dt) throw new Error("LOCAL: brak poprawnej effectiveDate");
 
-      const dt = parseDate(local.date);
-      if (!dt) throw new Error("LOCAL: brak poprawnej effectiveDate");
+                    const age = daysOld(dt);
+                    if (age > MAX_AGE_DAYS) {
+                        throw new Error(`LOCAL: kurs zbyt stary (${age} dni)`);
+                    }
 
-      const age = daysOld(dt);
-      if (age > MAX_AGE_DAYS) {
-        throw new Error(`LOCAL: kurs zbyt stary (${age} dni)`);
-      }
+                    applyRate(local.mid, local.date, `LOCAL (fallback)`);
+                    return;
+                } catch (e2) {
+                    if (status) status.textContent =
+                        "Nie udało się pobrać kursu z NBP, a lokalny eur.json jest brakujący/stary. " +
+                        "Uzupełnij kurs ręcznie albo ustaw automatyczną aktualizację na VPS.";
+                }
+            }
+        }
 
-      applyRate(local.mid, local.date, `LOCAL (fallback)`);
-      return;
-    } catch (e2) {
-      if (status) status.textContent =
-        "Nie udało się pobrać kursu z NBP, a lokalny eur.json jest brakujący/stary. " +
-        "Uzupełnij kurs ręcznie albo ustaw automatyczną aktualizację na VPS.";
-      // nic nie nadpisujemy — zostaje obecna wartość w polu kursu
-    }
-  }
-}
+        // ---------------------------------------------------------------
+        // Pobiera kurs średni EUR/PLN z NBP dla KONKRETNEJ DATY.
+        // Używane do automatycznego uzupełniania kursu przy zaliczkach.
+        // Jeśli w danym dniu nie było notowania (weekend, święto),
+        // cofa się dzień po dniu (max 5 prób) aż znajdzie kurs.
+        // Zwraca: { mid: number, effectiveDate: string } lub null.
+        // ---------------------------------------------------------------
+        async function fetchEurRateForDate(dateStr) {
+            const MAX_RETRIES = 5; // Maksymalna liczba prób cofania się w dniach
+            let currentDate = new Date(dateStr + 'T12:00:00Z'); // Południe, by uniknąć problemów ze strefą czasową
 
+            for (let i = 0; i < MAX_RETRIES; i++) {
+                // Formatuj datę jako YYYY-MM-DD
+                const yyyy = currentDate.getFullYear();
+                const mm = String(currentDate.getMonth() + 1).padStart(2, '0');
+                const dd = String(currentDate.getDate()).padStart(2, '0');
+                const dateFormatted = `${yyyy}-${mm}-${dd}`;
 
+                try {
+                    // Endpoint NBP API — kurs średni EUR tabela A dla konkretnej daty
+                    const url = `https://api.nbp.pl/api/exchangerates/rates/A/EUR/${dateFormatted}/?format=json`;
+                    const res = await fetch(url);
+
+                    if (res.ok) {
+                        const data = await res.json();
+                        return {
+                            mid: data.rates[0].mid,
+                            effectiveDate: data.rates[0].effectiveDate
+                        };
+                    }
+                    // HTTP 404 = brak notowania w tym dniu (weekend/święto) → cofamy się o 1 dzień
+                } catch (e) {
+                    // Błąd sieci lub CORS → przerywamy próby
+                    return null;
+                }
+
+                // Cofnij datę o 1 dzień
+                currentDate.setDate(currentDate.getDate() - 1);
+            }
+
+            // Nie znaleziono kursu w ciągu MAX_RETRIES dni wstecz
+            return null;
+        }
+
+        // ---------------------------------------------------------------
+        // Ładuje listę diet zagranicznych z pliku JSON (data/diets.json).
+        // Wypełnia dropdown z krajami i stawkami diet.
+        // ---------------------------------------------------------------
         async function loadDiets() {
             const status = document.getElementById("dietStatus");
             const select = document.getElementById("dietCountry");
@@ -1017,6 +1115,9 @@
             }
         }
 
+        // ---------------------------------------------------------------
+        // Ustawia stawkę diety w polu formularza po wybraniu kraju z dropdown.
+        // ---------------------------------------------------------------
         function applyDietFromCountry() {
             const status = document.getElementById("dietStatus");
             const select = document.getElementById("dietCountry");
@@ -1031,23 +1132,158 @@
 
             document.getElementById("wysokoscDiety").value = Number(item.diet).toFixed(2);
             if (status) status.textContent = "Ustawiono dietę " + item.diet + " " + (item.currency || "EUR") + " dla " + code;
-
-            calculate();
         }
 
 
-        // Walidacja i sanityzacja inputu - tylko cyfry i kropka/przecinek
+        // ═══════════════════════════════════════════════════════════════════
+        // OBSŁUGA ZALICZEK
+        // ═══════════════════════════════════════════════════════════════════
+
+        // ---------------------------------------------------------------
+        // Wywoływane po zmianie daty w wierszu zaliczki.
+        // Automatycznie pobiera kurs EUR z NBP dla wybranej daty.
+        // ---------------------------------------------------------------
+        async function onZaliczkaDateChange(nr) {
+            const dateInput = document.getElementById(`zaliczka${nr}_data`);
+            const kursInput = document.getElementById(`zaliczka${nr}_kurs`);
+            const statusEl = document.getElementById(`zaliczka${nr}_status`);
+            const dateStr = dateInput.value;
+
+            if (!dateStr) {
+                statusEl.textContent = '';
+                statusEl.className = 'zaliczka-status';
+                return;
+            }
+
+            // Walidacja: data nie może być w przyszłości
+            const today = new Date().toISOString().split('T')[0];
+            if (dateStr > today) {
+                statusEl.textContent = 'Data nie może być w przyszłości';
+                statusEl.className = 'zaliczka-status err';
+                return;
+            }
+
+            // Jeśli pole kursu jest odblokowane (ręczne), nie nadpisujemy
+            if (!kursInput.readOnly) {
+                statusEl.textContent = 'Tryb ręczny — kurs nie zostanie pobrany automatycznie';
+                statusEl.className = 'zaliczka-status warn';
+                return;
+            }
+
+            // Pobierz kurs z NBP
+            statusEl.textContent = 'Pobieram kurs z NBP…';
+            statusEl.className = 'zaliczka-status';
+
+            const result = await fetchEurRateForDate(dateStr);
+
+            if (result) {
+                // Kurs pobrany pomyślnie
+                kursInput.value = Number(result.mid).toFixed(4);
+                statusEl.textContent = `NBP (${result.effectiveDate}): ${result.mid}`;
+                statusEl.className = 'zaliczka-status ok';
+            } else {
+                // Nie udało się pobrać — użytkownik musi wpisać ręcznie
+                kursInput.value = '';
+                statusEl.textContent = 'Nie udało się pobrać kursu z NBP — wpisz ręcznie (🔒→✏️)';
+                statusEl.className = 'zaliczka-status err';
+            }
+
+            // Aktualizuj podsumowanie zaliczek
+            updateZaliczkaSummary();
+        }
+
+        // ---------------------------------------------------------------
+        // Przełącza blokadę pola kursu EUR w wierszu zaliczki.
+        // 🔒 = readonly (kurs pobierany automatycznie z NBP)
+        // ✏️ = odblokowany (kurs wpisywany ręcznie)
+        // ---------------------------------------------------------------
+        function toggleKursLock(nr) {
+            const kursInput = document.getElementById(`zaliczka${nr}_kurs`);
+            const btn = kursInput.parentElement.querySelector('.kurs-lock-btn');
+            const statusEl = document.getElementById(`zaliczka${nr}_status`);
+
+            if (kursInput.readOnly) {
+                // Odblokuj do edycji ręcznej
+                kursInput.readOnly = false;
+                btn.textContent = '✏️';
+                btn.classList.add('unlocked');
+                btn.title = 'Zablokuj (powrót do automatycznego kursu)';
+                statusEl.textContent = 'Tryb ręczny — wpisz kurs samodzielnie';
+                statusEl.className = 'zaliczka-status warn';
+            } else {
+                // Zablokuj — powrót do automatycznego
+                kursInput.readOnly = true;
+                btn.textContent = '🔒';
+                btn.classList.remove('unlocked');
+                btn.title = 'Odblokuj do edycji ręcznej';
+
+                // Spróbuj ponownie pobrać kurs z NBP jeśli jest data
+                const dateStr = document.getElementById(`zaliczka${nr}_data`).value;
+                if (dateStr) {
+                    onZaliczkaDateChange(nr);
+                } else {
+                    statusEl.textContent = '';
+                    statusEl.className = 'zaliczka-status';
+                }
+            }
+        }
+
+        // ---------------------------------------------------------------
+        // Zbiera dane ze wszystkich niepustych wierszy zaliczek.
+        // Zwraca tablicę: [{kwota: number, data: string, kurs: number}, ...]
+        // Pomija wiersze, w których kwota jest pusta/zerowa lub kurs jest zerowy.
+        // ---------------------------------------------------------------
+        function getZaliczki() {
+            const result = [];
+            for (let i = 1; i <= 4; i++) {
+                const kwota = parseFloat(document.getElementById(`zaliczka${i}_kwota`).value) || 0;
+                const data = document.getElementById(`zaliczka${i}_data`).value || '';
+                const kurs = parseFloat(document.getElementById(`zaliczka${i}_kurs`).value) || 0;
+
+                // Tylko wiersze z kwotą > 0 i kursem > 0 wchodzą do obliczeń
+                if (kwota > 0 && kurs > 0) {
+                    result.push({ kwota, data, kurs });
+                }
+            }
+            return result;
+        }
+
+        // ---------------------------------------------------------------
+        // Aktualizuje podsumowanie zaliczek (suma PLN i EUR) na żywo.
+        // Wywoływane przy każdej zmianie w polach zaliczek.
+        // ---------------------------------------------------------------
+        function updateZaliczkaSummary() {
+            const zaliczki = getZaliczki();
+
+            // Suma kwot w PLN (prosta suma)
+            const sumaPLN = zaliczki.reduce((sum, z) => sum + z.kwota, 0);
+
+            // Suma w EUR — każda zaliczka przeliczona po swoim kursie z dnia wypłaty
+            const sumaEUR = zaliczki.reduce((sum, z) => sum + (z.kwota / z.kurs), 0);
+
+            document.getElementById('sumZaliczekPLN').textContent = formatNumber(sumaPLN) + ' PLN';
+            document.getElementById('sumZaliczekEUR').textContent = formatNumber(sumaEUR) + ' EUR';
+        }
+
+
+        // ═══════════════════════════════════════════════════════════════════
+        // WALIDACJA I SANITYZACJA
+        // ═══════════════════════════════════════════════════════════════════
+
+        // ---------------------------------------------------------------
+        // Sanityzacja pola input — pozwala tylko na cyfry i kropkę/przecinek.
+        // Zamienia przecinek na kropkę (format polski → format JS).
+        // Zapobiega wklejaniu złośliwego kodu.
+        // ---------------------------------------------------------------
         function sanitizeInput(input) {
             const element = document.getElementById(input);
-            
-            // Usuń wszystkie znaki oprócz cyfr, kropki i przecinka
+            if (!element) return;
+
+            // Filtruj znaki podczas wpisywania
             element.addEventListener('input', function(e) {
                 let value = e.target.value;
-                // Zamień przecinek na kropkę
                 value = value.replace(',', '.');
-                // Usuń wszystkie znaki oprócz cyfr i kropki
                 value = value.replace(/[^\d.]/g, '');
-                // Upewnij się że jest tylko jedna kropka
                 const parts = value.split('.');
                 if (parts.length > 2) {
                     value = parts[0] + '.' + parts.slice(1).join('');
@@ -1055,11 +1291,10 @@
                 e.target.value = value;
             });
 
-            // Zapobiegaj wklejaniu złośliwego kodu
+            // Filtruj wklejany tekst
             element.addEventListener('paste', function(e) {
                 e.preventDefault();
                 let pastedText = (e.clipboardData || window.clipboardData).getData('text');
-                // Sanityzuj wklejony tekst
                 pastedText = pastedText.replace(',', '.').replace(/[^\d.]/g, '');
                 const parts = pastedText.split('.');
                 if (parts.length > 2) {
@@ -1069,10 +1304,15 @@
             });
         }
 
-        // Walidacja pola
+        // ---------------------------------------------------------------
+        // Walidacja pojedynczego pola — sprawdza czy wartość jest liczbą >= 0.
+        // Pokazuje/ukrywa komunikat błędu.
+        // ---------------------------------------------------------------
         function validateField(fieldId) {
             const field = document.getElementById(fieldId);
             const errorMsg = document.getElementById('error-' + fieldId);
+            if (!field || !errorMsg) return true; // Pole nie istnieje lub nie ma error-msg — pomijamy
+
             const value = parseFloat(field.value);
 
             if (!field.value || field.value.trim() === '' || isNaN(value) || value < 0) {
@@ -1086,76 +1326,15 @@
             }
         }
 
-        // Pomocnicza funkcja do walidacji pojedynczego wiersza zaliczki.
-        // Sprawdza zależności pomiędzy trzema polami: kwotą, datą i kursem.
-        // Wiersz pusty jest poprawny i zostaje pominięty w dalszych obliczeniach.
-        function validateZaliczkaRow(index) {
-            const kwotaField = document.getElementById(`zaliczka${index}_kwota`);
-            const dataField = document.getElementById(`zaliczka${index}_data`);
-            const kursField = document.getElementById(`zaliczka${index}_kurs`);
-            const errorField = document.getElementById(`error-zaliczka${index}`);
-            const manualField = document.getElementById(`zaliczka${index}_manual`);
-
-            const kwotaText = kwotaField.value.trim();
-            const dataText = dataField.value.trim();
-            const kursText = kursField.value.trim();
-            const kwota = parseFloat(kwotaField.value) || 0;
-            const kurs = parseFloat(kursField.value) || 0;
-            const hasAnyValue = kwotaText !== '' || dataText !== '' || kursText !== '';
-            const today = new Date();
-            const selectedDate = dataText ? new Date(dataText + 'T00:00:00') : null;
-
-            kwotaField.classList.remove('error');
-            dataField.classList.remove('error');
-            kursField.classList.remove('error');
-            errorField.classList.remove('show');
-
-            if (!hasAnyValue) {
-                return false;
-            }
-
-            let isValid = true;
-            let errorText = '';
-
-            if (!(kwota > 0)) {
-                isValid = false;
-                errorText = 'Kwota zaliczki musi być większa od zera.';
-                kwotaField.classList.add('error');
-            }
-
-            if (!dataText) {
-                isValid = false;
-                errorText = 'Uzupełnij datę wypłaty zaliczki.';
-                dataField.classList.add('error');
-            }
-
-            if (selectedDate && selectedDate > new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59)) {
-                isValid = false;
-                errorText = 'Data zaliczki nie może być w przyszłości.';
-                dataField.classList.add('error');
-            }
-
-            if (!(kurs > 0)) {
-                isValid = false;
-                errorText = manualField.checked
-                    ? 'Przy trybie ręcznym wpisz kurs większy od zera.'
-                    : 'Kurs nie został pobrany — wpisz go ręcznie lub wybierz poprawną datę.';
-                kursField.classList.add('error');
-            }
-
-            if (!isValid) {
-                errorField.textContent = errorText;
-                errorField.classList.add('show');
-            }
-
-            return isValid;
-        }
-
-        // Walidacja wszystkich pól
+        // ---------------------------------------------------------------
+        // Walidacja wszystkich wymaganych pól formularza.
+        // Pola informacyjne (stawka, godziny) NIE są walidowane — są opcjonalne.
+        // Zaliczki walidowane osobno w calculate().
+        // ---------------------------------------------------------------
         function validateAllFields() {
+            // Pola wymagane z Sekcji B (parametry rozliczenia)
             const fields = ['kursEuro', 'dniZaGranica', 'wysokoscDiety', 'srednia', 'pitNarastajaco'];
             let allValid = true;
-            let validZaliczkiCount = 0;
 
             fields.forEach(field => {
                 if (!validateField(field)) {
@@ -1163,98 +1342,108 @@
                 }
             });
 
-            for (let i = 1; i <= 4; i++) {
-                const rowIsValid = validateZaliczkaRow(i);
-                if (rowIsValid) {
-                    validZaliczkiCount++;
-                }
-
-                const kwotaField = document.getElementById(`zaliczka${i}_kwota`);
-                const dataField = document.getElementById(`zaliczka${i}_data`);
-                const kursField = document.getElementById(`zaliczka${i}_kurs`);
-                const hasAnyValue = kwotaField.value.trim() !== '' || dataField.value.trim() !== '' || kursField.value.trim() !== '';
-
-                if (hasAnyValue && !rowIsValid) {
-                    allValid = false;
-                }
-            }
-
-            const globalError = document.getElementById('error-zaliczki-global');
-            if (validZaliczkiCount === 0) {
-                globalError.textContent = 'Wpisz co najmniej jedną poprawną zaliczkę (kwota, data i kurs).';
-                globalError.classList.add('show');
-                allValid = false;
-            } else {
-                globalError.classList.remove('show');
-            }
-
             return allValid;
         }
 
-        
-        function clampMin(num, minVal) {
-            return num < minVal ? minVal : num;
-        }
 
-        // Oblicz PIT (H) z uwzględnieniem progu 120 000 PLN rocznie (narastająco).
-        // pitNarastajaco = suma podstawy PIT (G) od początku roku PRZED tym miesiącem (PLN).
+        // ═══════════════════════════════════════════════════════════════════
+        // SILNIK OBLICZENIOWY — BEZ ZMIAN WZGLĘDEM v1
+        // Wzory: ZUS, PIT, zdrowotna, koszt pracodawcy
+        // ═══════════════════════════════════════════════════════════════════
+
+        // ---------------------------------------------------------------
+        // Oblicza zaliczkę PIT (H) z uwzględnieniem progu 120 000 PLN rocznie.
+        // pitNarastajaco = suma podstawy PIT (G) od początku roku PRZED tym miesiącem.
+        //
+        // Stawki:
+        //   - do 120 000 PLN/rok: 12%
+        //   - powyżej 120 000 PLN/rok: 32%
+        //   - kwota zmniejszająca podatek: 300 PLN/miesiąc
+        //   - jeśli podatek wychodzi ujemny → 0
+        // ---------------------------------------------------------------
         function calculatePIT(G_miesieczne, pitNarastajaco) {
-            const prog = 120000;
+            const prog = 120000; // Próg podatkowy (roczny, PLN)
 
-            // Jeśli podstawa jest ujemna lub zerowa, nie naliczamy podatku
+            // Jeśli podstawa PIT jest ujemna lub zerowa — brak podatku
             if (!isFinite(G_miesieczne) || G_miesieczne <= 0) return 0;
 
-            const ytd = clampMin(pitNarastajaco || 0, 0);
+            const ytd = clampMin(pitNarastajaco || 0, 0); // Narastająco nie może być ujemne
 
             let podatek = 0;
             if (ytd >= prog) {
+                // Cała podstawa w II progu (32%)
                 podatek = G_miesieczne * 0.32;
             } else if (ytd + G_miesieczne <= prog) {
+                // Cała podstawa w I progu (12%)
                 podatek = G_miesieczne * 0.12;
             } else {
-                // Miesiąc "przebija" próg – część 12%, część 32%
-                const czesc12 = prog - ytd;
-                const czesc32 = G_miesieczne - czesc12;
+                // Miesiąc "przebija" próg — część w 12%, reszta w 32%
+                const czesc12 = prog - ytd;           // Ile jeszcze mieści się w I progu
+                const czesc32 = G_miesieczne - czesc12; // Nadwyżka w II progu
                 podatek = czesc12 * 0.12 + czesc32 * 0.32;
             }
 
-            // Kwota zmniejszająca: 300 PLN / miesiąc (wg opisu)
+            // Kwota zmniejszająca podatek: 300 PLN / miesiąc
             podatek = podatek - 300;
 
-            // Nie pozwalamy na ujemny PIT
+            // PIT nie może być ujemny
             return clampMin(podatek, 0);
         }
 
-        // Liczy wszystko "w przód": z A (brutto miesięczne w PLN) -> B, C + szczegóły.
-        // Zgodnie z opisem: dla ZUS podstawa ma "podłogę" średniej krajowej,
-        // dla PIT nie ma tej podłogi (odjęcie 30% diet + koszty 300 PLN).
+        // ---------------------------------------------------------------
+        // Liczy wszystkie składniki "w przód" — z A (brutto miesięczne w PLN)
+        // oblicza B (netto), C (koszt pracodawcy) i szczegóły.
+        //
+        // Parametry:
+        //   A_pln          — wynagrodzenie brutto miesięczne (PLN)
+        //   dniZaGranica   — liczba dni za granicą w miesiącu
+        //   dietaEuro      — stawka diety dziennej (EUR)
+        //   kursEuro       — kurs EUR/PLN do przeliczenia diet
+        //   srednia        — średnia krajowa (PLN) — podłoga podstawy ZUS
+        //   pitNarastajaco — narastająca podstawa PIT od początku roku
+        //
+        // Diety:
+        //   - ZUS: odliczamy 100% diety (cała dieta × dni × kurs)
+        //   - PIT: odliczamy tylko 30% diety (30% × dieta × dni × kurs)
+        //   To jest asymetria wynikająca z przepisów.
+        // ---------------------------------------------------------------
         function calculateFromA(A_pln, dniZaGranica, dietaEuro, kursEuro, srednia, pitNarastajaco) {
-            // Diety:
-            // - ZUS: odliczamy 100% diety (dieta * dni)
-            // - PIT: odliczamy 30% diety (30% * dieta * dni)
-            const dietaZUS = 1.00 * dietaEuro * kursEuro * dniZaGranica;   // 100% diety x dni (PLN)
-            const dietaPIT = 0.30 * dietaEuro * kursEuro * dniZaGranica;   // 30% diety x dni (PLN)
+            // --- DIETY ---
+            // Dieta do odliczenia od podstawy ZUS: 100% stawki dziennej × kurs × dni
+            const dietaZUS = 1.00 * dietaEuro * kursEuro * dniZaGranica;
+            // Dieta do odliczenia od podstawy PIT: tylko 30% stawki dziennej × kurs × dni
+            const dietaPIT = 0.30 * dietaEuro * kursEuro * dniZaGranica;
 
-            // Podstawa ZUS: max(A - dietaZUS, średnia)
+            // --- PODSTAWA ZUS ---
+            // D = max(brutto − dieta ZUS, średnia krajowa)
+            // Podłoga = średnia krajowa — podstawa ZUS nie może być niższa
             const D = Math.max(A_pln - dietaZUS, srednia);
 
-            // Składki pracownika
-            const E = D * 0.1371;                 // ZUS społeczne pracownika
-            const F = (D - E) * 0.09;             // zdrowotna
+            // --- SKŁADKI PRACOWNIKA ---
+            // E = ZUS społeczne pracownika: 13.71% od podstawy ZUS
+            const E = D * 0.1371;
+            // F = składka zdrowotna: 9% od (podstawa ZUS − składki społeczne)
+            const F = (D - E) * 0.09;
 
-            // Podstawa PIT (miesięczna) – bez "podłogi" średniej; PIT odlicza tylko 30% diet
-            // + koszty pracownicze 300 PLN (wg uwag klienta)
+            // --- PODSTAWA PIT ---
+            // G = (brutto − 30% diety) − składki społeczne − koszty pracownicze
+            // Koszty pracownicze: stała 300 PLN/miesiąc
+            // Uwaga: podstawa PIT NIE ma podłogi średniej krajowej (w odróżnieniu od ZUS)
             const kosztyPracownicze = 300;
             const G = (A_pln - dietaPIT) - E - kosztyPracownicze;
 
-            // Zaliczka PIT
+            // --- ZALICZKA PIT ---
+            // H = obliczona z funkcji calculatePIT (uwzględnia progi i narastająco)
             const H = calculatePIT(G, pitNarastajaco);
 
-            // Netto (do wypłaty)
+            // --- NETTO (do wypłaty) ---
+            // B = brutto − składki społeczne − zdrowotna − PIT
             const B_pln = A_pln - E - F - H;
 
-            // Koszt pracodawcy: składki pracodawcy liczone od podstawy ZUS (D)
+            // --- KOSZT PRACODAWCY ---
+            // Składki pracodawcy: 19.52% od podstawy ZUS (D)
             const zusPracodawcy = D * 0.1952;
+            // C = brutto + składki pracodawcy
             const C_pln = A_pln + zusPracodawcy;
 
             return {
@@ -1266,36 +1455,48 @@
             };
         }
 
-        // Szukanie A (brutto) dla zadanego B (netto) – metoda bisekcji.
+        // ---------------------------------------------------------------
+        // Szukanie A (brutto) dla zadanego B (netto) — metoda bisekcji.
+        //
+        // Problem: znamy pożądane netto (targetB_pln), szukamy brutto (A_pln)
+        // które po przejściu przez calculateFromA() da to netto.
+        //
+        // Metoda: bisekcja (binary search) w przedziale [0, high].
+        // Rozszerzamy high aż netto z high >= targetB, potem szukamy dokładnie.
+        // Tolerancja: 0.01 PLN (1 grosz).
+        // Maksymalnie 80 iteracji.
+        // ---------------------------------------------------------------
         function findAfromB(targetB_pln, dniZaGranica, dietaEuro, kursEuro, srednia, pitNarastajaco) {
-            // Jeżeli targetB <= 0, zwracamy 0
+            // Jeżeli targetB <= 0, nie ma czego szukać
             if (!isFinite(targetB_pln) || targetB_pln <= 0) return 0;
 
-            // Ustalamy przedział [low, high] tak, aby f(low) <= targetB <= f(high)
+            // Ustalamy przedział szukania [low, high]
             let low = 0;
-            let high = Math.max(targetB_pln * 1.6, srednia); // start
+            let high = Math.max(targetB_pln * 1.6, srednia); // Startowa górna granica
 
-            // Funkcja netto z A
+            // Funkcja pomocnicza: netto z danego brutto
             const netFromA = (A) => calculateFromA(A, dniZaGranica, dietaEuro, kursEuro, srednia, pitNarastajaco).B_pln;
 
-            // Rozszerz high aż netto będzie >= target
-            // (w razie bardzo dużych potrąceń / progów)
+            // Rozszerzanie górnej granicy — jeśli high daje za mało netto, podnosimy
             let safety = 0;
             while (netFromA(high) < targetB_pln && safety < 60) {
                 high *= 1.6;
                 safety++;
             }
 
-            // Jeśli mimo to nie osiągnęliśmy targetu (ekstremalne dane), zwróć high jako best-effort
+            // Jeśli mimo rozszerzania nie osiągnęliśmy targetu — zwracamy high jako best-effort
             if (netFromA(high) < targetB_pln) return high;
 
-            // Bisekcja
+            // Właściwa bisekcja
             let mid = high;
             for (let i = 0; i < 80; i++) {
                 mid = (low + high) / 2;
                 const bMid = netFromA(mid);
 
-                if (Math.abs(bMid - targetB_pln) < 0.01) break; // 1 grosz
+                // Jeśli trafiliśmy z dokładnością do 1 grosza — koniec
+                if (Math.abs(bMid - targetB_pln) < 0.01) break;
+
+                // Zawężamy przedział
                 if (bMid < targetB_pln) low = mid;
                 else high = mid;
             }
@@ -1303,336 +1504,102 @@
             return mid;
         }
 
-        // Pobiera kurs średni EUR/PLN z NBP dla podanej daty.
-        // Jeśli w danym dniu nie było notowania (weekend, święto), cofa się dzień po dniu (max 5 prób).
-        // Zwraca: { mid: number, effectiveDate: string } lub null jeśli nie znaleziono.
-        async function fetchEurRateForDate(dateStr) {
-            const MAX_RETRIES = 5;
-            let currentDate = new Date(dateStr + 'T12:00:00Z');
 
-            for (let i = 0; i < MAX_RETRIES; i++) {
-                const yyyy = currentDate.getUTCFullYear();
-                const mm = String(currentDate.getUTCMonth() + 1).padStart(2, '0');
-                const dd = String(currentDate.getUTCDate()).padStart(2, '0');
-                const dateFormatted = `${yyyy}-${mm}-${dd}`;
+        // ═══════════════════════════════════════════════════════════════════
+        // GŁÓWNA FUNKCJA OBLICZENIOWA
+        // ═══════════════════════════════════════════════════════════════════
 
-                try {
-                    const url = `https://api.nbp.pl/api/exchangerates/rates/A/EUR/${dateFormatted}/?format=json`;
-                    const res = await fetch(url);
-                    if (res.ok) {
-                        const data = await res.json();
-                        return {
-                            mid: data.rates[0].mid,
-                            effectiveDate: data.rates[0].effectiveDate
-                        };
-                    }
-                } catch (e) {
-                    return null;
-                }
-
-                currentDate.setUTCDate(currentDate.getUTCDate() - 1);
-            }
-
-            return null;
-        }
-
-        // Zbiera dane ze wszystkich niepustych wierszy zaliczek.
-        // Zwraca tablicę obiektów: [{kwota: number, data: string, kurs: number, index: number}, ...]
-        // Pomija wiersze, które są całkowicie puste albo nie przeszły pełnej walidacji biznesowej.
-        function getZaliczki() {
-            const result = [];
-            for (let i = 1; i <= 4; i++) {
-                const kwotaField = document.getElementById(`zaliczka${i}_kwota`);
-                const dataField = document.getElementById(`zaliczka${i}_data`);
-                const kursField = document.getElementById(`zaliczka${i}_kurs`);
-                const kwota = parseFloat(kwotaField.value) || 0;
-                const data = dataField.value || '';
-                const kurs = parseFloat(kursField.value) || 0;
-                const hasAnyValue = kwotaField.value.trim() !== '' || dataField.value.trim() !== '' || kursField.value.trim() !== '';
-
-                if (!hasAnyValue) {
-                    continue;
-                }
-
-                if (kwota > 0 && data && kurs > 0) {
-                    result.push({ kwota, data, kurs, index: i });
-                }
-            }
-            return result;
-        }
-
-        // Ustawia tekst statusu w konkretnym wierszu zaliczki oraz dobiera klasę kolorystyczną,
-        // aby użytkownik od razu widział, czy kurs został pobrany automatycznie, wpisany ręcznie
-        // albo wymaga interwencji.
-        function setZaliczkaStatus(index, message, variant = '') {
-            const status = document.getElementById(`zaliczka${index}_status`);
-            status.textContent = message;
-            status.className = 'zaliczka-status';
-            if (variant) {
-                status.classList.add(variant);
-            }
-        }
-
-        // Przełącza pole kursu pomiędzy trybem automatycznym i ręcznym.
-        // W trybie automatycznym pole pozostaje tylko do odczytu i pobiera kurs z NBP po zmianie daty.
-        // W trybie ręcznym użytkownik może nadpisać kurs, np. gdy API nie odpowiada lub firma używa własnego kursu.
-        function toggleManualRate(index, isManual) {
-            const kursField = document.getElementById(`zaliczka${index}_kurs`);
-            kursField.readOnly = !isManual;
-
-            if (isManual) {
-                setZaliczkaStatus(index, 'Ręczny', 'manual');
-            } else {
-                const dataValue = document.getElementById(`zaliczka${index}_data`).value;
-                if (dataValue) {
-                    handleZaliczkaDateChange(index, dataValue);
-                } else if (!kursField.value) {
-                    setZaliczkaStatus(index, 'Wybierz datę lub wpisz dane ręcznie.');
-                }
-            }
-        }
-
-        // Reaguje na wybór daty zaliczki.
-        // Jeśli użytkownik nie zaznaczył trybu ręcznego, próbujemy pobrać historyczny kurs EUR z NBP.
-        // Przy sukcesie pole kursu uzupełnia się automatycznie, a przy błędzie odblokowujemy ręczne wpisanie wartości.
-        async function handleZaliczkaDateChange(index, explicitDateValue) {
-            const dateField = document.getElementById(`zaliczka${index}_data`);
-            const kursField = document.getElementById(`zaliczka${index}_kurs`);
-            const manualField = document.getElementById(`zaliczka${index}_manual`);
-            const dateValue = explicitDateValue || dateField.value;
-            const todayStr = new Date().toISOString().split('T')[0];
-
-            if (!dateValue) {
-                if (!manualField.checked && !kursField.value) {
-                    setZaliczkaStatus(index, 'Wybierz datę lub wpisz dane ręcznie.');
-                }
-                updateZaliczkiSummary();
-                return;
-            }
-
-            if (dateValue > todayStr) {
-                kursField.value = '';
-                setZaliczkaStatus(index, 'Data w przyszłości — wybierz poprawną datę.', 'warning');
-                validateZaliczkaRow(index);
-                updateZaliczkiSummary();
-                return;
-            }
-
-            if (manualField.checked) {
-                setZaliczkaStatus(index, 'Ręczny', 'manual');
-                validateZaliczkaRow(index);
-                updateZaliczkiSummary();
-                return;
-            }
-
-            setZaliczkaStatus(index, 'Pobieram kurs NBP dla wskazanej daty…');
-            kursField.value = '';
-
-            const rate = await fetchEurRateForDate(dateValue);
-            if (rate) {
-                kursField.value = Number(rate.mid).toFixed(4);
-                setZaliczkaStatus(index, `NBP ${rate.effectiveDate}: ${Number(rate.mid).toFixed(4)}`, 'ok');
-            } else {
-                kursField.readOnly = false;
-                manualField.checked = true;
-                setZaliczkaStatus(index, 'Nie udało się pobrać kursu — wpisz ręcznie', 'warning');
-            }
-
-            validateZaliczkaRow(index);
-            updateZaliczkiSummary();
-            calculate();
-        }
-
-        // Przelicza na żywo podsumowanie wszystkich poprawnie wypełnionych zaliczek.
-        // Suma w PLN jest bezpośrednią bazą dalszych obliczeń netto,
-        // natomiast suma w EUR ma wyłącznie charakter informacyjny i powstaje z dzielenia każdej transzy przez jej własny kurs.
-        function updateZaliczkiSummary() {
-            const zaliczki = getZaliczki();
-            const sumaPLN = zaliczki.reduce((sum, z) => sum + z.kwota, 0);
-            const sumaEUR = zaliczki.reduce((sum, z) => sum + (z.kwota / z.kurs), 0);
-
-            document.getElementById('zaliczkiSummaryPLN').textContent = `${formatNumber(sumaPLN)} PLN`;
-            document.getElementById('zaliczkiSummaryEUR').textContent = `${formatNumber(sumaEUR)} EUR`;
-
-            const globalError = document.getElementById('error-zaliczki-global');
-            if (zaliczki.length > 0) {
-                globalError.classList.remove('show');
-            }
-        }
-
-        // Renderuje szczegółową listę zaliczek w sekcji wyników.
-        // Dzięki temu w wydruku i na ekranie widać, z jakich realnych wypłat zbudowano docelową kwotę netto.
-        function renderZaliczkiDetails(zaliczki) {
-            const list = document.getElementById('zaliczkiDetailsList');
-            list.innerHTML = '';
-
-            if (zaliczki.length === 0) {
-                const emptyRow = document.createElement('div');
-                emptyRow.className = 'detail-row';
-                emptyRow.innerHTML = '<span class="detail-label">Brak zaliczek</span><span class="detail-value">Uzupełnij sekcję A</span>';
-                list.appendChild(emptyRow);
-                return;
-            }
-
-            zaliczki.forEach((z, idx) => {
-                const row = document.createElement('div');
-                row.className = 'detail-row';
-                const kwotaEUR = z.kwota / z.kurs;
-                row.innerHTML = `
-                    <span class="detail-label">Zaliczka ${idx + 1}: ${formatNumber(z.kwota)} PLN | ${z.data} | kurs ${formatNumber(z.kurs, 4)}</span>
-                    <span class="detail-value">${formatNumber(kwotaEUR)} EUR</span>
-                `;
-                list.appendChild(row);
-            });
-        }
-
-        // Czyści sekcję wyników, gdy kalkulator nie ma jeszcze kompletnej bazy danych do obliczeń.
-        // To zapobiega prezentowaniu nieaktualnych wyników po usunięciu zaliczek lub przy częściowo wpisanych danych.
-        function hideResultsSection() {
-            document.getElementById('resultsSection').style.display = 'none';
-        }
-
-        // Rejestruje komplet zdarzeń dla pojedynczego wiersza zaliczki.
-        // Dzięki temu każdy wiersz działa identycznie: sanitizacja, pobieranie kursu po dacie,
-        // walidacja po edycji i natychmiastowe odświeżenie podsumowania.
-        function setupZaliczkaRow(index, maxDate) {
-            const kwotaField = document.getElementById(`zaliczka${index}_kwota`);
-            const dataField = document.getElementById(`zaliczka${index}_data`);
-            const kursField = document.getElementById(`zaliczka${index}_kurs`);
-            const manualField = document.getElementById(`zaliczka${index}_manual`);
-            const errorField = document.getElementById(`error-zaliczka${index}`);
-
-            dataField.max = maxDate;
-
-            [kwotaField, kursField].forEach((field) => {
-                field.addEventListener('input', function() {
-                    validateZaliczkaRow(index);
-                    updateZaliczkiSummary();
-                });
-
-                field.addEventListener('focus', function() {
-                    kwotaField.classList.remove('error');
-                    kursField.classList.remove('error');
-                    dataField.classList.remove('error');
-                    errorField.classList.remove('show');
-                });
-            });
-
-            dataField.addEventListener('change', function() {
-                validateZaliczkaRow(index);
-                handleZaliczkaDateChange(index);
-            });
-
-            dataField.addEventListener('focus', function() {
-                kwotaField.classList.remove('error');
-                kursField.classList.remove('error');
-                dataField.classList.remove('error');
-                errorField.classList.remove('show');
-            });
-
-            manualField.addEventListener('change', function() {
-                toggleManualRate(index, this.checked);
-                validateZaliczkaRow(index);
-                updateZaliczkiSummary();
-                calculate();
-            });
-
-            kursField.addEventListener('blur', function() {
-                if (manualField.checked && kursField.value) {
-                    setZaliczkaStatus(index, 'Ręczny', 'manual');
-                }
-                validateZaliczkaRow(index);
-                updateZaliczkiSummary();
-            });
-        }
-
-        // Główna funkcja kalkulatora.
-        // Najpierw waliduje dane wejściowe, następnie sumuje realnie wypłacone zaliczki netto w PLN,
-        // a dopiero później uruchamia niezmieniony silnik bisekcji i wzory ZUS/PIT.
-        function calculate(showAlerts = false) {
-            // Walidacja przed obliczeniami
+        function calculate() {
+            // --- WALIDACJA ---
+            // Sprawdź pola z Sekcji B (parametry rozliczenia)
             if (!validateAllFields()) {
-                hideResultsSection();
-                if (showAlerts) {
-                    const firstError = document.querySelector('input.error');
-                    if (firstError) {
-                        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        firstError.focus();
-                    }
+                const firstError = document.querySelector('input.error');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstError.focus();
                 }
                 return;
             }
 
-            // Pobierz wartości z formularza.
-            // Pola informacyjne pozostają w formularzu, ale nie wpływają już na bazę obliczeń netto.
-            const stawkaNettoEuro = parseFloat(document.getElementById('stawkaBruttoEuro').value) || 0;
-            const iloscGodzin = parseFloat(document.getElementById('iloscGodzin').value) || 0;
+            // --- POBIERZ ZALICZKI ---
+            // Zbieramy wszystkie niepuste wiersze zaliczek (Sekcja A)
+            const zaliczki = getZaliczki();
+
+            // Musi być co najmniej jedna zaliczka z kwotą i kursem
+            if (zaliczki.length === 0) {
+                alert('Wpisz co najmniej jedną zaliczkę (kwota PLN + kurs EUR).');
+                return;
+            }
+
+            // --- NOWA BAZA OBLICZEŃ ---
+            // targetB_pln = suma wszystkich zaliczek w PLN
+            // To jest kwota netto wypłacona pracownikowi w danym miesiącu.
+            // ZASTĘPUJE starą formułę: stawkaNettoEuro × kursEuro × iloscGodzin
+            const targetB_pln = zaliczki.reduce((sum, z) => sum + z.kwota, 0);
+
+            // Suma przeliczona na EUR — każda zaliczka dzielona przez swój kurs z dnia wypłaty
+            // To uwzględnia różne kursy EUR w różnych dniach miesiąca
+            const sumaZaliczekEUR = zaliczki.reduce((sum, z) => sum + (z.kwota / z.kurs), 0);
+
+            // Średni ważony kurs EUR — wyliczony z proporcji PLN/EUR
+            // Używany do przeliczania wyników końcowych na EUR (informacyjnie)
+            const kursWazony = targetB_pln / sumaZaliczekEUR;
+
+            // --- PARAMETRY ROZLICZENIA (Sekcja B) ---
+            // Kurs EUR do rozliczenia diet — OSOBNY od kursów zaliczek
+            const kursEuroDoDiet = parseFloat(document.getElementById('kursEuro').value) || 0;
             const dniZaGranica = parseFloat(document.getElementById('dniZaGranica').value) || 0;
             const wysokoscDiety = parseFloat(document.getElementById('wysokoscDiety').value) || 0;
             const srednia = parseFloat(document.getElementById('srednia').value) || 0;
             const pitNarastajaco = parseFloat(document.getElementById('pitNarastajaco').value) || 0;
 
-            // Kurs EUR używany WYŁĄCZNIE do rozliczenia diet (przeliczenie diety EUR → PLN).
-            const kursEuroDoDiet = parseFloat(document.getElementById('kursEuro').value) || 0;
+            // --- DANE INFORMACYJNE (Sekcja C) — opcjonalne ---
+            const iloscGodzin = parseFloat(document.getElementById('iloscGodzin').value) || 0;
 
-            // NOWE: Suma zaliczek (wypłat netto w PLN) jest nową bazą obliczeń.
-            // Każda zaliczka to realna transza wypłacona pracownikowi.
-            const zaliczki = getZaliczki();
-
-            if (zaliczki.length === 0) {
-                hideResultsSection();
-                if (showAlerts) {
-                    alert('Wpisz co najmniej jedną zaliczkę.');
-                }
-                return;
-            }
-
-            // Suma zaliczek w PLN = kwota netto wypłacona pracownikowi w tym miesiącu.
-            const targetB_pln = zaliczki.reduce((sum, z) => sum + z.kwota, 0);
-
-            // Suma przeliczona na EUR — informacyjnie, każda zaliczka przeliczona po swoim kursie z dnia wypłaty.
-            const sumaZaliczekEUR = zaliczki.reduce((sum, z) => sum + (z.kwota / z.kurs), 0);
-
-            // Średni kurs ważony pokazuje, jaki kurs reprezentuje całą paczkę wypłat.
-            // Używamy go wyłącznie do raportowania wyników w EUR oraz przeliczeń EUR/h,
-            // ponieważ nie istnieje już jeden wspólny kurs dla wszystkich wypłat netto.
-            const kursWazonaAvg = sumaZaliczekEUR > 0 ? (targetB_pln / sumaZaliczekEUR) : 0;
-
-            // Znajdź A (brutto miesięczne w PLN) przy niezmienionym silniku obliczeniowym.
+            // --- BISEKCJA: szukamy brutto (A) dla zadanego netto (targetB_pln) ---
+            // kursEuroDoDiet jest przekazywany do calculateFromA — używany WYŁĄCZNIE do diet
             const A_pln = findAfromB(targetB_pln, dniZaGranica, wysokoscDiety, kursEuroDoDiet, srednia, pitNarastajaco);
 
-            // Policz szczegóły z obliczonego A.
+            // --- OBLICZENIA W PRZÓD: z brutto liczymy wszystkie składniki ---
             const r = calculateFromA(A_pln, dniZaGranica, wysokoscDiety, kursEuroDoDiet, srednia, pitNarastajaco);
 
-            // Wyniki końcowe w PLN pozostają bezpośrednio oparte o wynik silnika.
-            // Wersje EUR i EUR/h są informacyjne i korzystają z kursu ważonego zaliczek.
+            // --- WYNIKI KOŃCOWE ---
+            // Wypłata pracownika (netto) — w PLN to targetB_pln, w EUR po kursie ważonym
             const pracownikWyplataPLN = r.B_pln;
-            const pracownikWyplataEURO = kursWazonaAvg > 0 ? (pracownikWyplataPLN / kursWazonaAvg) : 0;
+            const pracownikWyplataEURO = pracownikWyplataPLN / kursWazony;
             const pracownikWyplata1h = iloscGodzin > 0 ? (pracownikWyplataEURO / iloscGodzin) : 0;
 
+            // Koszt pracodawcy — brutto + składki pracodawcy
             const kosztPracodawcyPLN = r.C_pln;
-            const kosztPracodawcyEURO = kursWazonaAvg > 0 ? (kosztPracodawcyPLN / kursWazonaAvg) : 0;
+            const kosztPracodawcyEURO = kosztPracodawcyPLN / kursWazony;
             const kosztPracodawcy1h = iloscGodzin > 0 ? (kosztPracodawcyEURO / iloscGodzin) : 0;
 
-            // Wyświetl wyniki.
+            // --- WYŚWIETLANIE WYNIKÓW ---
+
+            // Karty główne
             document.getElementById('wyplataPLN').textContent = formatNumber(pracownikWyplataPLN) + ' PLN';
             document.getElementById('wyplataEURO').textContent = formatNumber(pracownikWyplataEURO) + ' EUR';
-            document.getElementById('wyplataGodzina').textContent = iloscGodzin > 0
-                ? formatNumber(pracownikWyplata1h) + ' EUR/h'
-                : (stawkaNettoEuro > 0 ? formatNumber(stawkaNettoEuro) + ' EUR/h (info)' : 'Brak danych o godzinach');
+            document.getElementById('wyplataGodzina').textContent = iloscGodzin > 0 ? formatNumber(pracownikWyplata1h) + ' EUR/h' : '— (brak godzin)';
 
             document.getElementById('kosztPLN').textContent = formatNumber(kosztPracodawcyPLN) + ' PLN';
             document.getElementById('kosztEURO').textContent = formatNumber(kosztPracodawcyEURO) + ' EUR';
-            document.getElementById('kosztGodzina').textContent = iloscGodzin > 0
-                ? formatNumber(kosztPracodawcy1h) + ' EUR/h'
-                : 'Uzupełnij godziny, aby wyliczyć EUR/h';
+            document.getElementById('kosztGodzina').textContent = iloscGodzin > 0 ? formatNumber(kosztPracodawcy1h) + ' EUR/h' : '— (brak godzin)';
 
-            // Wyświetl sumę zaliczek zarówno w sekcji szczegółów, jak i w tabeli wynikowej.
-            document.getElementById('sumaZaliczekPLN').textContent = formatNumber(targetB_pln) + ' PLN';
-            document.getElementById('sumaZaliczekEUR').textContent = formatNumber(sumaZaliczekEUR) + ' EUR';
-            renderZaliczkiDetails(zaliczki);
+            // Szczegóły zaliczek — tabela dynamiczna
+            let zaliczkiHTML = '';
+            zaliczki.forEach((z, idx) => {
+                const eurVal = z.kwota / z.kurs;
+                zaliczkiHTML += `
+                    <div class="detail-row">
+                        <span class="detail-label">Zaliczka ${idx + 1}: ${formatNumber(z.kwota)} PLN (${z.data}, kurs: ${z.kurs.toFixed(4)})</span>
+                        <span class="detail-value">${formatNumber(eurVal)} EUR</span>
+                    </div>`;
+            });
+            document.getElementById('zaliczkiDetails').innerHTML = zaliczkiHTML;
+            document.getElementById('sumaZaliczekWynik').textContent =
+                formatNumber(targetB_pln) + ' PLN / ' + formatNumber(sumaZaliczekEUR) + ' EUR (śr. kurs: ' + kursWazony.toFixed(4) + ')';
 
-            // Szczegóły (A, diety, ZUS, PIT).
+            // Szczegóły obliczeń (ZUS, PIT, diety — identycznie jak w v1)
             document.getElementById('wynBrutto').textContent = formatNumber(r.A_pln) + ' PLN';
             document.getElementById('dietaZUS').textContent = formatNumber(r.dietaZUS) + ' PLN';
             document.getElementById('dietaPIT').textContent = formatNumber(r.dietaPIT) + ' PLN';
@@ -1647,69 +1614,57 @@
 
             document.getElementById('zusPracodawca').textContent = formatNumber(r.zusPracodawcy) + ' PLN';
 
-            // Pokaż sekcję wyników.
+            // Pokaż sekcję wyników
             document.getElementById('resultsSection').style.display = 'block';
 
-            // Przewiń do wyników (tylko przy ręcznym kliknięciu, nie przy auto-load).
-            if (showAlerts && window.calculatorLoaded) {
+            // Przewiń do wyników (tylko przy ręcznym kliknięciu, nie przy auto-load)
+            if (window.calculatorLoaded) {
                 document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
         }
 
-        // Flaga dla pierwszego załadowania.
+
+        // ═══════════════════════════════════════════════════════════════════
+        // INICJALIZACJA
+        // ═══════════════════════════════════════════════════════════════════
+
+        // Flaga: czy strona jest w pełni załadowana (aby nie przewijać do wyników przy pierwszym load)
         window.calculatorLoaded = false;
 
-        // Inicjalizacja wszystkich zdarzeń formularza.
-        // Łączymy tutaj sanitizację liczb, walidację standardowych pól, konfigurację zaliczek
-        // oraz wczytanie danych pomocniczych (diety). Dzięki temu całość startuje spójnie po załadowaniu strony.
         window.addEventListener('load', function() {
-            const fields = ['stawkaBruttoEuro', 'kursEuro', 'iloscGodzin', 'dniZaGranica', 'wysokoscDiety', 'srednia', 'pitNarastajaco'];
-            const todayStr = new Date().toISOString().split('T')[0];
-            
-            // Dodaj sanityzację do każdego pola numerycznego.
-            fields.forEach(field => {
+
+            // --- Sanityzacja pól z Sekcji B ---
+            const fieldsB = ['kursEuro', 'dniZaGranica', 'wysokoscDiety', 'srednia', 'pitNarastajaco'];
+            fieldsB.forEach(field => {
                 sanitizeInput(field);
-                
-                // Walidacja przy opuszczeniu pola.
+
+                // Walidacja przy opuszczeniu pola
                 document.getElementById(field).addEventListener('blur', function() {
-                    if (['kursEuro', 'dniZaGranica', 'wysokoscDiety', 'srednia', 'pitNarastajaco'].includes(field)) {
-                        validateField(field);
-                    }
+                    validateField(field);
                 });
 
-                // Usuń error przy rozpoczęciu edycji.
+                // Usuń error przy rozpoczęciu edycji
                 document.getElementById(field).addEventListener('focus', function() {
                     this.classList.remove('error');
-                    document.getElementById('error-' + field).classList.remove('show');
-                });
-
-                // Aktualizacja wyników na bieżąco tylko wtedy, gdy dane są kompletne.
-                document.getElementById(field).addEventListener('input', function() {
-                    if (['kursEuro', 'dniZaGranica', 'wysokoscDiety', 'srednia', 'pitNarastajaco'].includes(field)) {
-                        calculate();
-                    }
+                    const errEl = document.getElementById('error-' + field);
+                    if (errEl) errEl.classList.remove('show');
                 });
             });
 
-            // Skonfiguruj wszystkie cztery wiersze zaliczek.
+            // --- Sanityzacja pól zaliczek (kwoty i kursy) ---
             for (let i = 1; i <= 4; i++) {
                 sanitizeInput(`zaliczka${i}_kwota`);
                 sanitizeInput(`zaliczka${i}_kurs`);
-                setupZaliczkaRow(i, todayStr);
             }
 
-            // Załaduj dietę (lista krajów) z pliku JSON na serwerze.
+            // --- Sanityzacja pól informacyjnych (Sekcja C) ---
+            sanitizeInput('stawkaBruttoEuro');
+            sanitizeInput('iloscGodzin');
+
+            // --- Załaduj diety z pliku JSON ---
             loadDiets();
 
-            // Podsumowanie startowe powinno pokazać zero, a nie stare dane z cache DOM.
-            updateZaliczkiSummary();
-
-            // Zachowujemy pierwsze wywołanie kalkulatora z poprzedniej wersji.
-            // Jeśli nie ma jeszcze zaliczek, funkcja zakończy się cicho bez pokazywania błędnych wyników.
-            calculate();
-
-            // Ustaw flagę, że strona jest w pełni załadowana.
-            // Kolejne ręczne obliczenia mogą już przewijać do wyników.
+            // Ustaw flagę — następne obliczenia będą przewijać do wyników
             window.calculatorLoaded = true;
         });
     </script>
