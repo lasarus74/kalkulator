@@ -301,19 +301,20 @@
         .kurs-dieta-group {
             display: flex;
             gap: 12px;
-            align-items: end;
+            align-items: flex-end;
             grid-column: 1 / -1;
         }
 
         .kurs-dieta-group .kurs-dieta-fetch {
             display: flex;
             flex-direction: column;
-            flex: 0 0 auto;
-            margin-bottom: 20px;
+            flex: 1 1 0;
+            min-width: 0;
+            margin-bottom: 0;
         }
 
         .kurs-dieta-group .kurs-dieta-fetch .small-btn {
-            width: auto;
+            width: 100%;
             margin-top: 0;
             white-space: nowrap;
         }
