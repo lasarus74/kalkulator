@@ -518,6 +518,11 @@
                 width: 100%;
             }
 
+            /* Sekcja B: zmniejszony odstęp h2 → przycisk na mobile */
+            .input-section:has(.kurs-dieta-group) h2 {
+                margin-bottom: 20px;
+            }
+
             /* Sekcja B: kurs-dieta-group — kolumna na mobile, fetch nad polem */
             .kurs-dieta-group {
                 flex-direction: column;
@@ -527,7 +532,9 @@
             .kurs-dieta-group .kurs-dieta-fetch {
                 order: -1;
                 text-align: center;
-                margin-bottom: 0;
+                margin-bottom: 12px;
+                flex: none;
+                justify-content: flex-start;
             }
 
             .kurs-dieta-group .kurs-dieta-fetch label {
